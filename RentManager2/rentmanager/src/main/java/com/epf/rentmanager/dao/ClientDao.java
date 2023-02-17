@@ -44,6 +44,31 @@ public class ClientDao {
 	}
 
 	public List<Client> findAll() throws DaoException {
+
+		List<Client> clients = new ArrayList<Client>();
+
+		try{
+			Connection connection = ConnectionManager.getConnection();
+			Statement statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery(FIND_CLIENTS_QUERY);
+
+			while(rs.next()){
+				int id = rs.getInt("id");
+				String nom = rs.getString("nom");
+				String prenom = rs.getString("prenom");
+				String email = rs.getString("email");
+				LocalDate date = rs.getDate("naissance").toLocalDate();
+
+				Client client = new Client(id, nom, prenom, email, date);
+				System.out.println(client);
+				clients.add(client);
+
+			}
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+			throw new DaoException();
+		}
 		return new ArrayList<Client>();
 	}
 

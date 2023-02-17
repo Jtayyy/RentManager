@@ -1,5 +1,6 @@
 package com.epf.rentmanager.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.epf.rentmanager.exception.DaoException;
@@ -27,16 +28,19 @@ public class VehicleService {
 	}
 	
 	
-//	public long create(Vehicle vehicle) throws ServiceException {
-//		// TODO: créer un véhicule
-//	}
+	public long create(Vehicle vehicle) throws ServiceException {
+		// TODO: créer un véhicule
+		return 0;
+	}
 
-//	public Vehicle findById(long id) throws ServiceException {
-//		// TODO: récupérer un véhicule par son id
-//	}
+	public Vehicle findById(long id) throws ServiceException {
+		// TODO: récupérer un véhicule par son id
+		return (new Vehicle());
+	}
 
-//	public List<Vehicle> findAll() throws ServiceException {
-//		// TODO: récupérer tous les clients
-//	}
+	public List<Vehicle> findAll() throws ServiceException {
+		// TODO: récupérer tous les clients
+		return new ArrayList<Vehicle>();
+	}
 	
 }
