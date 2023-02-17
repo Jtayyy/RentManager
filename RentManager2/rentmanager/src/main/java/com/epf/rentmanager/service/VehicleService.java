@@ -27,19 +27,16 @@ public class VehicleService {
 	}
 	
 	
-	public long create(Vehicle vehicle) throws ServiceException {
-		// TODO: créer un véhicule
-		
-	}
+//	public long create(Vehicle vehicle) throws ServiceException {
+//		// TODO: créer un véhicule
+//	}
 
-	public Vehicle findById(long id) throws ServiceException {
-		// TODO: récupérer un véhicule par son id
-		
-	}
+//	public Vehicle findById(long id) throws ServiceException {
+//		// TODO: récupérer un véhicule par son id
+//	}
 
-	public List<Vehicle> findAll() throws ServiceException {
-		// TODO: récupérer tous les clients
-		
-	}
+//	public List<Vehicle> findAll() throws ServiceException {
+//		// TODO: récupérer tous les clients
+//	}
 	
 }
