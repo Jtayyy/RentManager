@@ -5,11 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import com.epf.rentmanager.exception.DaoException;
+import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.persistence.ConnectionManager;
 
@@ -38,13 +40,58 @@ public class VehicleDao {
 	}
 
 	public Vehicle findById(long id) throws DaoException {
-		return new Vehicle();
+
+		try{
+			Connection connection = ConnectionManager.getConnection();
+			PreparedStatement statement = connection.prepareStatement(FIND_VEHICLE_QUERY);
+			statement.setLong(1, id);
+
+			ResultSet rs = statement.executeQuery();
+
+			rs.next();
+			String constructeur = rs.getString("constructeur");
+			int nb_places = rs.getInt("nb_places");
+
+			connection.close();
+			statement.close();
+			rs.close();
+
+			return new Vehicle(id, constructeur, nb_places);
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+			throw new DaoException();
+		}
 	}
 
 	public List<Vehicle> findAll() throws DaoException {
-		return new ArrayList<Vehicle>();
-		
-	}
-	
 
+		List<Vehicle> vehicules = new ArrayList<Vehicle>();
+
+		try{
+			Connection connection = ConnectionManager.getConnection();
+			Statement statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery(FIND_VEHICLES_QUERY);
+
+			while(rs.next()){
+				long id = rs.getInt("id");
+				String constructeur = rs.getString("constructeur");
+				int nb_places = rs.getInt("nb_places");
+
+				Vehicle vehicule = new Vehicle(id, constructeur, nb_places);
+				vehicules.add(vehicule);
+
+			}
+
+			connection.close();
+			statement.close();
+			rs.close();
+
+			return vehicules;
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+			throw new DaoException();
+		}
+	}
 }

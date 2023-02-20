@@ -25,7 +25,15 @@ public class ClientService {
 		return instance;
 	}
 	
-	
+	public int getCount() throws ServiceException {
+
+		try{
+			return ClientDao.getInstance().findAll().size();
+		}
+		catch (DaoException e){
+			throw new ServiceException();
+		}
+	}
 	public long create(Client client) throws ServiceException {
 		// TODO: créer un client
 		return 0;
@@ -33,7 +41,12 @@ public class ClientService {
 
 	public Client findById(long id) throws ServiceException {
 		// TODO: récupérer un client par son id
-		return new Client();
+		try{
+			return ClientDao.getInstance().findById(id);
+		}
+		catch (DaoException e){
+			throw new ServiceException();
+		}
 	}
 
 	public List<Client> findAll() throws ServiceException {
