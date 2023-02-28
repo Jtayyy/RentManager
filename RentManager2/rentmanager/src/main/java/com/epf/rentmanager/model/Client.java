@@ -18,6 +18,13 @@ public class Client {
         this.bdate = bdate;
     }
 
+    public Client(String firstname, String lastname, String email, LocalDate bdate) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.bdate = bdate;
+    }
+
     public Client() {
         this.id = 000;
         this.firstname = "None";
@@ -35,5 +42,21 @@ public class Client {
                 ", email='" + email + '\'' +
                 ", bdate=" + bdate +
                 '}';
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public LocalDate getBdate() {
+        return bdate;
     }
 }

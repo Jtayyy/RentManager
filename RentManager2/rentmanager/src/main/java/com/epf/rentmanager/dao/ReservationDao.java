@@ -31,7 +31,8 @@ public class ReservationDao {
 	private static final String FIND_RESERVATIONS_BY_CLIENT_QUERY = "SELECT id, vehicle_id, debut, fin FROM Reservation WHERE client_id=?;";
 	private static final String FIND_RESERVATIONS_BY_VEHICLE_QUERY = "SELECT id, client_id, debut, fin FROM Reservation WHERE vehicle_id=?;";
 	private static final String FIND_RESERVATIONS_QUERY = "SELECT id, client_id, vehicle_id, debut, fin FROM Reservation;";
-		
+	private static final String COUNT_RESERVATIONS_QUERY = "SELECT COUNT(*) AS total FROM Reservation;";
+
 	public long create(Reservation reservation) throws DaoException {
 		return 0;
 	}
@@ -132,6 +133,28 @@ public class ReservationDao {
 			rs.close();
 
 			return reservations;
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+			throw new DaoException();
+		}
+	}
+
+	public int getCount() throws DaoException {
+
+		try{
+			Connection connection = ConnectionManager.getConnection();
+			Statement statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery(COUNT_RESERVATIONS_QUERY);
+
+			rs.next();
+			int count = rs.getInt("total");
+
+			connection.close();
+			statement.close();
+			rs.close();
+
+			return count;
 		}
 		catch (SQLException e){
 			e.printStackTrace();

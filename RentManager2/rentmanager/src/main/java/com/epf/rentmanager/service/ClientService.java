@@ -24,19 +24,25 @@ public class ClientService {
 		
 		return instance;
 	}
-	
-	public int getCount() throws ServiceException {
 
+	public void create(Client client) throws ServiceException {
+		// TODO: créer un client
 		try{
-			return ClientDao.getInstance().findAll().size();
+			ClientDao.getInstance().create(client);
 		}
 		catch (DaoException e){
 			throw new ServiceException();
 		}
 	}
-	public long create(Client client) throws ServiceException {
-		// TODO: créer un client
-		return 0;
+
+	public void delete(long id) throws ServiceException {
+		// TODO: supprimer un client
+		try{
+			ClientDao.getInstance().delete(id);
+		}
+		catch (DaoException e){
+			throw new ServiceException();
+		}
 	}
 
 	public Client findById(long id) throws ServiceException {
@@ -53,6 +59,16 @@ public class ClientService {
 		// TODO: récupérer tous les clients
 		try{
 			return ClientDao.getInstance().findAll();
+		}
+		catch (DaoException e){
+			throw new ServiceException();
+		}
+	}
+
+	public int getCount() throws ServiceException {
+		// TODO: compter tous les clients
+		try{
+			return ClientDao.getInstance().getCount();
 		}
 		catch (DaoException e){
 			throw new ServiceException();

@@ -52,5 +52,15 @@ public class VehicleService {
 			throw new ServiceException();
 		}
 	}
+
+	public int getCount() throws ServiceException {
+		// TODO: compter tous les clients
+		try{
+			return VehicleDao.getInstance().getCount();
+		}
+		catch (DaoException e){
+			throw new ServiceException();
+		}
+	}
 	
 }

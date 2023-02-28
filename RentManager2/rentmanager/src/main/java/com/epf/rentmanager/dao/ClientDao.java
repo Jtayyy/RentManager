@@ -30,13 +30,45 @@ public class ClientDao {
 	private static final String DELETE_CLIENT_QUERY = "DELETE FROM Client WHERE id=?;";
 	private static final String FIND_CLIENT_QUERY = "SELECT nom, prenom, email, naissance FROM Client WHERE id=?;";
 	private static final String FIND_CLIENTS_QUERY = "SELECT id, nom, prenom, email, naissance FROM Client;";
+	private static final String COUNT_CLIENTS_QUERY = "SELECT COUNT(*) AS total FROM Client;";
 	
-	public long create(Client client) throws DaoException {
-		return 0;
+	public void delete(long id) throws DaoException {
+
+		try{
+			Connection connection = ConnectionManager.getConnection();
+			PreparedStatement statement = connection.prepareStatement(DELETE_CLIENT_QUERY);
+			statement.setLong(1, id);
+
+			statement.execute();
+
+			connection.close();
+			statement.close();
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+			throw new DaoException();
+		}
 	}
-	
-	public long delete(Client client) throws DaoException {
-		return 0;
+
+	public void create(Client client) throws DaoException {
+
+		try{
+			Connection connection = ConnectionManager.getConnection();
+			PreparedStatement statement = connection.prepareStatement(CREATE_CLIENT_QUERY);
+			statement.setString(1, client.getLastname());
+			statement.setString(2, client.getFirstname());
+			statement.setString(3, client.getEmail());
+			statement.setDate(4, Date.valueOf(client.getBdate()));
+
+			statement.execute();
+
+			connection.close();
+			statement.close();
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+			throw new DaoException();
+		}
 	}
 
 	public Client findById(long id) throws DaoException {
@@ -98,4 +130,25 @@ public class ClientDao {
 		}
 	}
 
+	public int getCount() throws DaoException {
+
+		try{
+			Connection connection = ConnectionManager.getConnection();
+			Statement statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery(COUNT_CLIENTS_QUERY);
+
+			rs.next();
+			int count = rs.getInt("total");
+
+			connection.close();
+			statement.close();
+			rs.close();
+
+			return count;
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+			throw new DaoException();
+		}
+	}
 }
