@@ -1,10 +1,6 @@
 package com.epf.rentmanager.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +28,41 @@ public class VehicleDao {
 	private static final String FIND_VEHICLES_QUERY = "SELECT id, constructeur, nb_places FROM Vehicle;";
 	private static final String COUNT_VEHICLES_QUERY = "SELECT COUNT(*) AS total FROM Vehicle;";
 
-	public long create(Vehicle vehicle) throws DaoException {
-		return 0;
+	public void delete(long id) throws DaoException {
+
+		try{
+			Connection connection = ConnectionManager.getConnection();
+			PreparedStatement statement = connection.prepareStatement(DELETE_VEHICLE_QUERY);
+			statement.setLong(1, id);
+
+			statement.execute();
+
+			connection.close();
+			statement.close();
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+			throw new DaoException();
+		}
 	}
 
-	public long delete(Vehicle vehicle) throws DaoException {
-		return 0;
+	public void create(Vehicle vehicle) throws DaoException {
+
+		try{
+			Connection connection = ConnectionManager.getConnection();
+			PreparedStatement statement = connection.prepareStatement(CREATE_VEHICLE_QUERY);
+			statement.setString(1, vehicle.getConstructor());
+			statement.setInt(2, vehicle.getNbPlaces());
+
+			statement.execute();
+
+			connection.close();
+			statement.close();
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+			throw new DaoException();
+		}
 	}
 
 	public Vehicle findById(long id) throws DaoException {

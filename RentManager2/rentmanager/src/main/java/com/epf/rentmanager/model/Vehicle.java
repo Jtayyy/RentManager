@@ -12,6 +12,11 @@ public class Vehicle {
         this.nb_places = nb_places;
     }
 
+    public Vehicle(String constructor, int nb_places) {
+        this.constructor = constructor;
+        this.nb_places = nb_places;
+    }
+
     public Vehicle() {
         this.id = 000;
         this.constructor = "None";
@@ -25,5 +30,13 @@ public class Vehicle {
                 ", constructor='" + constructor + '\'' +
                 ", nb_places=" + nb_places +
                 '}';
+    }
+
+    public String getConstructor() {
+        return constructor;
+    }
+
+    public int getNbPlaces() {
+        return nb_places;
     }
 }

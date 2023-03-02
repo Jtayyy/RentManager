@@ -28,9 +28,24 @@ public class VehicleService {
 	}
 	
 	
-	public long create(Vehicle vehicle) throws ServiceException {
+	public void create(Vehicle vehicle) throws ServiceException {
 		// TODO: créer un véhicule
-		return 0;
+		try{
+			VehicleDao.getInstance().create(vehicle);
+		}
+		catch (DaoException e){
+			throw new ServiceException();
+		}
+	}
+
+	public void delete(long id) throws ServiceException {
+		// TODO: supprimer un véhicule
+		try{
+			VehicleDao.getInstance().delete(id);
+		}
+		catch (DaoException e){
+			throw new ServiceException();
+		}
 	}
 
 	public Vehicle findById(long id) throws ServiceException {

@@ -33,15 +33,45 @@ public class ReservationDao {
 	private static final String FIND_RESERVATIONS_QUERY = "SELECT id, client_id, vehicle_id, debut, fin FROM Reservation;";
 	private static final String COUNT_RESERVATIONS_QUERY = "SELECT COUNT(*) AS total FROM Reservation;";
 
-	public long create(Reservation reservation) throws DaoException {
-		return 0;
-	}
-	
-	public long delete(Reservation reservation) throws DaoException {
-		return 0;
+	public void delete(long id) throws DaoException {
+
+		try{
+			Connection connection = ConnectionManager.getConnection();
+			PreparedStatement statement = connection.prepareStatement(DELETE_RESERVATION_QUERY);
+			statement.setLong(1, id);
+
+			statement.execute();
+
+			connection.close();
+			statement.close();
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+			throw new DaoException();
+		}
 	}
 
-	
+	public void create(Reservation reservation) throws DaoException {
+
+		try{
+			Connection connection = ConnectionManager.getConnection();
+			PreparedStatement statement = connection.prepareStatement(CREATE_RESERVATION_QUERY);
+			statement.setLong(1, reservation.getClientId());
+			statement.setLong(2, reservation.getVehicleId());
+			statement.setDate(3, Date.valueOf(reservation.getDebut()));
+			statement.setDate(4, Date.valueOf(reservation.getFin()));
+
+			statement.execute();
+
+			connection.close();
+			statement.close();
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+			throw new DaoException();
+		}
+	}
+
 	public List<Reservation> findResaByClientId(long clientId) throws DaoException {
 
 		List<Reservation> reservations = new ArrayList<Reservation>();
