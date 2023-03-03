@@ -9,6 +9,7 @@ import com.epf.rentmanager.service.VehicleService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -136,6 +137,9 @@ public class main {
             }
             catch (InputMismatchException e){
                 System.out.println("Erreur de saisie, veuillez réessayer.");
+            }
+            catch (DateTimeParseException e){
+                System.out.println("Erreur de saisie dans la date de naissance (format : JJ/MM/AAAA)");
             }
         }
     }
