@@ -76,7 +76,7 @@ public class main {
                         switch (sc.nextInt()) {
 
                             case 1:
-                                vehicules.create(new Vehicle(sc.next(), sc.nextInt()));
+                                vehicules.create(new Vehicle(sc.next(), sc.next(), sc.nextInt()));
                                 break;
 
                             case 2:

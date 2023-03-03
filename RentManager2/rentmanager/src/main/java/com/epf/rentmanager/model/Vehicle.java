@@ -4,22 +4,26 @@ public class Vehicle {
 
     private long id;
     private String constructor;
+    private String modele;
     private int nbplaces;
 
-    public Vehicle(long id, String constructor, int nbplaces) {
+    public Vehicle(long id, String constructor, String modele, int nbplaces) {
         this.id = id;
         this.constructor = constructor;
+        this.modele = modele;
         this.nbplaces = nbplaces;
     }
 
-    public Vehicle(String constructor, int nbplaces) {
+    public Vehicle(String constructor, String modele, int nbplaces) {
         this.constructor = constructor;
+        this.modele = modele;
         this.nbplaces = nbplaces;
     }
 
     public Vehicle() {
         this.id = 000;
         this.constructor = "None";
+        this.modele = "None";
         this.nbplaces = 0;
     }
 
@@ -28,7 +32,8 @@ public class Vehicle {
         return "Vehicle{" +
                 "id=" + id +
                 ", constructor='" + constructor + '\'' +
-                ", nb_places=" + nbplaces +
+                ", modele='" + modele + '\'' +
+                ", nbplaces=" + nbplaces +
                 '}';
     }
 
@@ -37,6 +42,8 @@ public class Vehicle {
     public String getConstructor() {
         return constructor;
     }
+
+    public String getModele() { return modele; }
 
     public int getNbplaces() {
         return nbplaces;

@@ -19,10 +19,10 @@ public class VehicleDao {
 		return instance;
 	}
 	
-	private static final String CREATE_VEHICLE_QUERY = "INSERT INTO Vehicle(constructeur, nb_places) VALUES(?, ?);";
+	private static final String CREATE_VEHICLE_QUERY = "INSERT INTO Vehicle(constructeur, modele, nb_places) VALUES(?, ?, ?);";
 	private static final String DELETE_VEHICLE_QUERY = "DELETE FROM Vehicle WHERE id=?;";
-	private static final String FIND_VEHICLE_QUERY = "SELECT id, constructeur, nb_places FROM Vehicle WHERE id=?;";
-	private static final String FIND_VEHICLES_QUERY = "SELECT id, constructeur, nb_places FROM Vehicle;";
+	private static final String FIND_VEHICLE_QUERY = "SELECT id, constructeur, modele, nb_places FROM Vehicle WHERE id=?;";
+	private static final String FIND_VEHICLES_QUERY = "SELECT id, constructeur, modele, nb_places FROM Vehicle;";
 	private static final String COUNT_VEHICLES_QUERY = "SELECT COUNT(*) AS total FROM Vehicle;";
 
 	public void delete(long id) throws DaoException {
@@ -49,7 +49,8 @@ public class VehicleDao {
 			Connection connection = ConnectionManager.getConnection();
 			PreparedStatement statement = connection.prepareStatement(CREATE_VEHICLE_QUERY);
 			statement.setString(1, vehicle.getConstructor());
-			statement.setInt(2, vehicle.getNbplaces());
+			statement.setString(2, vehicle.getModele());
+			statement.setInt(3, vehicle.getNbplaces());
 
 			statement.execute();
 
@@ -73,13 +74,14 @@ public class VehicleDao {
 
 			rs.next();
 			String constructeur = rs.getString("constructeur");
+			String modele = rs.getString("modele");
 			int nb_places = rs.getInt("nb_places");
 
 			connection.close();
 			statement.close();
 			rs.close();
 
-			return new Vehicle(id, constructeur, nb_places);
+			return new Vehicle(id, constructeur, modele, nb_places);
 		}
 		catch (SQLException e){
 			e.printStackTrace();
@@ -99,9 +101,10 @@ public class VehicleDao {
 			while(rs.next()){
 				long id = rs.getInt("id");
 				String constructeur = rs.getString("constructeur");
+				String modele = rs.getString("modele");
 				int nb_places = rs.getInt("nb_places");
 
-				Vehicle vehicule = new Vehicle(id, constructeur, nb_places);
+				Vehicle vehicule = new Vehicle(id, constructeur, modele, nb_places);
 				vehicules.add(vehicule);
 
 			}
