@@ -33,8 +33,7 @@ public class ClientDao {
 	
 	public void delete(long id) throws DaoException {
 
-		try{
-			Connection connection = ConnectionManager.getConnection();
+		try(Connection connection = ConnectionManager.getConnection();){
 			PreparedStatement statement = connection.prepareStatement(DELETE_CLIENT_QUERY);
 			statement.setLong(1, id);
 
@@ -51,18 +50,16 @@ public class ClientDao {
 
 	public void create(Client client) throws DaoException {
 
-		try{
-			Connection connection = ConnectionManager.getConnection();
+		try(Connection connection = ConnectionManager.getConnection();){
+
 			PreparedStatement statement = connection.prepareStatement(CREATE_CLIENT_QUERY);
+
 			statement.setString(1, client.getLastname());
 			statement.setString(2, client.getFirstname());
 			statement.setString(3, client.getEmail());
 			statement.setDate(4, Date.valueOf(client.getBdate()));
 
 			statement.execute();
-
-			connection.close();
-			statement.close();
 		}
 		catch (SQLException e){
 			e.printStackTrace();
@@ -72,11 +69,10 @@ public class ClientDao {
 
 	public Client findById(long id) throws DaoException {
 
-		try{
-			Connection connection = ConnectionManager.getConnection();
+		try(Connection connection = ConnectionManager.getConnection();){
+
 			PreparedStatement statement = connection.prepareStatement(FIND_CLIENT_QUERY);
 			statement.setLong(1, id);
-
 			ResultSet rs = statement.executeQuery();
 
 			rs.next();
@@ -85,10 +81,7 @@ public class ClientDao {
 			String email = rs.getString("email");
 			LocalDate date = rs.getDate("naissance").toLocalDate();
 
-			connection.close();
-			statement.close();
 			rs.close();
-
 			return new Client(id, prenom, nom, email, date);
 		}
 		catch (SQLException e){
@@ -101,8 +94,8 @@ public class ClientDao {
 
 		List<Client> clients = new ArrayList<Client>();
 
-		try{
-			Connection connection = ConnectionManager.getConnection();
+		try(Connection connection = ConnectionManager.getConnection();){
+
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery(FIND_CLIENTS_QUERY);
 
@@ -117,10 +110,6 @@ public class ClientDao {
 				clients.add(client);
 			}
 
-			connection.close();
-			statement.close();
-			rs.close();
-
 			return clients;
 		}
 		catch (SQLException e){
@@ -131,17 +120,13 @@ public class ClientDao {
 
 	public int getCount() throws DaoException {
 
-		try{
-			Connection connection = ConnectionManager.getConnection();
+		try(Connection connection = ConnectionManager.getConnection();){
+
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery(COUNT_CLIENTS_QUERY);
 
 			rs.next();
 			int count = rs.getInt("total");
-
-			connection.close();
-			statement.close();
-			rs.close();
 
 			return count;
 		}

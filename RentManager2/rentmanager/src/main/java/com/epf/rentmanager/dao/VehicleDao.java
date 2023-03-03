@@ -27,15 +27,11 @@ public class VehicleDao {
 
 	public void delete(long id) throws DaoException {
 
-		try{
-			Connection connection = ConnectionManager.getConnection();
+		try(Connection connection = ConnectionManager.getConnection();){
 			PreparedStatement statement = connection.prepareStatement(DELETE_VEHICLE_QUERY);
 			statement.setLong(1, id);
 
 			statement.execute();
-
-			connection.close();
-			statement.close();
 		}
 		catch (SQLException e){
 			e.printStackTrace();
@@ -45,17 +41,13 @@ public class VehicleDao {
 
 	public void create(Vehicle vehicle) throws DaoException {
 
-		try{
-			Connection connection = ConnectionManager.getConnection();
+		try(Connection connection = ConnectionManager.getConnection();){
 			PreparedStatement statement = connection.prepareStatement(CREATE_VEHICLE_QUERY);
 			statement.setString(1, vehicle.getConstructor());
 			statement.setString(2, vehicle.getModele());
 			statement.setInt(3, vehicle.getNbplaces());
 
 			statement.execute();
-
-			connection.close();
-			statement.close();
 		}
 		catch (SQLException e){
 			e.printStackTrace();
@@ -65,8 +57,7 @@ public class VehicleDao {
 
 	public Vehicle findById(long id) throws DaoException {
 
-		try{
-			Connection connection = ConnectionManager.getConnection();
+		try(Connection connection = ConnectionManager.getConnection();){
 			PreparedStatement statement = connection.prepareStatement(FIND_VEHICLE_QUERY);
 			statement.setLong(1, id);
 
@@ -76,10 +67,6 @@ public class VehicleDao {
 			String constructeur = rs.getString("constructeur");
 			String modele = rs.getString("modele");
 			int nb_places = rs.getInt("nb_places");
-
-			connection.close();
-			statement.close();
-			rs.close();
 
 			return new Vehicle(id, constructeur, modele, nb_places);
 		}
@@ -93,8 +80,7 @@ public class VehicleDao {
 
 		List<Vehicle> vehicules = new ArrayList<Vehicle>();
 
-		try{
-			Connection connection = ConnectionManager.getConnection();
+		try(Connection connection = ConnectionManager.getConnection();){
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery(FIND_VEHICLES_QUERY);
 
@@ -108,11 +94,6 @@ public class VehicleDao {
 				vehicules.add(vehicule);
 
 			}
-
-			connection.close();
-			statement.close();
-			rs.close();
-
 			return vehicules;
 		}
 		catch (SQLException e){
@@ -123,18 +104,12 @@ public class VehicleDao {
 
 	public int getCount() throws DaoException {
 
-		try{
-			Connection connection = ConnectionManager.getConnection();
+		try(Connection connection = ConnectionManager.getConnection();){
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery(COUNT_VEHICLES_QUERY);
 
 			rs.next();
 			int count = rs.getInt("total");
-
-			connection.close();
-			statement.close();
-			rs.close();
-
 			return count;
 		}
 		catch (SQLException e){
