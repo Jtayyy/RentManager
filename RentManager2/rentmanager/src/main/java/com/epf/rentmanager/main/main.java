@@ -107,7 +107,7 @@ public class main {
                         switch (sc.nextInt()) {
 
                             case 1:
-                                reservations.create(new Reservation(sc.nextLong(), sc.nextLong(), LocalDate.parse(sc.next(), DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalDate.parse(sc.next(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+                                reservations.create(new Reservation(ClientService.getInstance().findById(sc.nextLong()), VehicleService.getInstance().findById(sc.nextLong()), LocalDate.parse(sc.next(), DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalDate.parse(sc.next(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
                                 break;
 
                             case 2:

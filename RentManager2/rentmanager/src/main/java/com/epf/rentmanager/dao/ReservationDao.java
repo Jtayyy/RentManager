@@ -11,9 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.epf.rentmanager.exception.DaoException;
+import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Reservation;
-import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.persistence.ConnectionManager;
+import com.epf.rentmanager.service.ClientService;
+import com.epf.rentmanager.service.VehicleService;
 
 public class ReservationDao {
 
@@ -56,8 +58,8 @@ public class ReservationDao {
 		try{
 			Connection connection = ConnectionManager.getConnection();
 			PreparedStatement statement = connection.prepareStatement(CREATE_RESERVATION_QUERY);
-			statement.setLong(1, reservation.getClientId());
-			statement.setLong(2, reservation.getVehicleId());
+			statement.setLong(1, reservation.getClient().getId());
+			statement.setLong(2, reservation.getVehicle().getId());
 			statement.setDate(3, Date.valueOf(reservation.getDebut()));
 			statement.setDate(4, Date.valueOf(reservation.getFin()));
 
@@ -85,11 +87,11 @@ public class ReservationDao {
 
 			while(rs.next()){
 				long id = rs.getLong("id");
-				long vehicle_id = rs.getLong("vehicle_id");
+				long vehicleId = rs.getLong("vehicle_id");
 				LocalDate debut = rs.getDate("debut").toLocalDate();
 				LocalDate fin = rs.getDate("fin").toLocalDate();
 
-				Reservation reservation = new Reservation(id, clientId, vehicle_id, debut, fin);
+				Reservation reservation = new Reservation(id, ClientDao.getInstance().findById(clientId), VehicleDao.getInstance().findById(vehicleId), debut, fin);
 				reservations.add(reservation);
 			}
 
@@ -100,6 +102,9 @@ public class ReservationDao {
 			return reservations;
 		}
 		catch (SQLException e){
+			e.printStackTrace();
+			throw new DaoException();
+		} catch (DaoException e) {
 			e.printStackTrace();
 			throw new DaoException();
 		}
@@ -118,11 +123,11 @@ public class ReservationDao {
 
 			while(rs.next()){
 				long id = rs.getLong("id");
-				long client_id = rs.getLong("client_id");
+				long clientId = rs.getLong("client_id");
 				LocalDate debut = rs.getDate("debut").toLocalDate();
 				LocalDate fin = rs.getDate("fin").toLocalDate();
 
-				Reservation reservation = new Reservation(id, client_id, vehicleId, debut, fin);
+				Reservation reservation = new Reservation(id, ClientDao.getInstance().findById(clientId), VehicleDao.getInstance().findById(vehicleId), debut, fin);
 				reservations.add(reservation);
 			}
 
@@ -133,6 +138,9 @@ public class ReservationDao {
 			return reservations;
 		}
 		catch (SQLException e){
+			e.printStackTrace();
+			throw new DaoException();
+		} catch (DaoException e) {
 			e.printStackTrace();
 			throw new DaoException();
 		}
@@ -149,12 +157,12 @@ public class ReservationDao {
 
 			while(rs.next()){
 				long id = rs.getLong("id");
-				long client_id = rs.getLong("client_id");
-				long vehicle_id = rs.getLong("vehicle_id");
+				long clientId = rs.getLong("client_id");
+				long vehicleId = rs.getLong("vehicle_id");
 				LocalDate debut = rs.getDate("debut").toLocalDate();
 				LocalDate fin = rs.getDate("fin").toLocalDate();
 
-				Reservation reservation = new Reservation(id, client_id, vehicle_id, debut, fin);
+				Reservation reservation = new Reservation(id, ClientDao.getInstance().findById(clientId), VehicleDao.getInstance().findById(vehicleId), debut, fin);
 				reservations.add(reservation);
 			}
 
@@ -165,6 +173,9 @@ public class ReservationDao {
 			return reservations;
 		}
 		catch (SQLException e){
+			e.printStackTrace();
+			throw new DaoException();
+		} catch (DaoException e) {
 			e.printStackTrace();
 			throw new DaoException();
 		}

@@ -89,7 +89,7 @@ public class ClientDao {
 			statement.close();
 			rs.close();
 
-			return new Client(id, nom, prenom, email, date);
+			return new Client(id, prenom, nom, email, date);
 		}
 		catch (SQLException e){
 			e.printStackTrace();
@@ -113,7 +113,7 @@ public class ClientDao {
 				String email = rs.getString("email");
 				LocalDate date = rs.getDate("naissance").toLocalDate();
 
-				Client client = new Client(id, nom, prenom, email, date);
+				Client client = new Client(id, prenom, nom, email, date);
 				clients.add(client);
 			}
 

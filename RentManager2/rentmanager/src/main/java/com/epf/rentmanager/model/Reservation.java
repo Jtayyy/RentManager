@@ -1,34 +1,36 @@
 package com.epf.rentmanager.model;
 
+import com.epf.rentmanager.service.VehicleService;
+
 import java.time.LocalDate;
 
 public class Reservation {
 
     private long id;
-    private long client_id;
-    private long vehicle_id;
+    private Client client;
+    private Vehicle vehicle;
     private LocalDate debut;
     private LocalDate fin;
 
-    public Reservation(long id, long client_id, long vehicle_id, LocalDate debut, LocalDate fin) {
+    public Reservation(long id, Client client, Vehicle vehicle, LocalDate debut, LocalDate fin) {
         this.id = id;
-        this.client_id = client_id;
-        this.vehicle_id = vehicle_id;
+        this.client = client;
+        this.vehicle = vehicle;
         this.debut = debut;
         this.fin = fin;
     }
 
-    public Reservation(long client_id, long vehicle_id, LocalDate debut, LocalDate fin) {
-        this.client_id = client_id;
-        this.vehicle_id = vehicle_id;
+    public Reservation(Client client, Vehicle vehicle, LocalDate debut, LocalDate fin) {
+        this.client = client;
+        this.vehicle = vehicle;
         this.debut = debut;
         this.fin = fin;
     }
 
     public Reservation() {
         this.id = 000;
-        this.client_id = 000;
-        this.vehicle_id = 000;
+        this.client = new Client();
+        this.vehicle = new Vehicle();
         this.debut = LocalDate.now();
         this.fin = LocalDate.now();
     }
@@ -37,8 +39,8 @@ public class Reservation {
     public String toString() {
         return "Reservation{" +
                 "id=" + id +
-                ", client_id=" + client_id +
-                ", vehicle_id=" + vehicle_id +
+                ", client_id=" + client +
+                ", vehicle_id=" + vehicle +
                 ", debut=" + debut +
                 ", fin=" + fin +
                 '}';
@@ -46,12 +48,12 @@ public class Reservation {
 
     public long getId() { return id; }
 
-    public long getClientId() {
-        return client_id;
+    public Client getClient() {
+        return client;
     }
 
-    public long getVehicleId() {
-        return vehicle_id;
+    public Vehicle getVehicle() {
+        return vehicle;
     }
 
     public LocalDate getDebut() {
