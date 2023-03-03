@@ -44,6 +44,8 @@ public class Client {
                 '}';
     }
 
+    public long getId() { return id; }
+
     public String getFirstname() {
         return firstname;
     }

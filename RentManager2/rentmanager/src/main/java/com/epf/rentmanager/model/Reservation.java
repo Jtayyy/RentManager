@@ -44,6 +44,8 @@ public class Reservation {
                 '}';
     }
 
+    public long getId() { return id; }
+
     public long getClientId() {
         return client_id;
     }

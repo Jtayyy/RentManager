@@ -1,13 +1,10 @@
 package com.epf.rentmanager.dao;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.epf.rentmanager.exception.DaoException;
-import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.persistence.ConnectionManager;
 
@@ -52,7 +49,7 @@ public class VehicleDao {
 			Connection connection = ConnectionManager.getConnection();
 			PreparedStatement statement = connection.prepareStatement(CREATE_VEHICLE_QUERY);
 			statement.setString(1, vehicle.getConstructor());
-			statement.setInt(2, vehicle.getNbPlaces());
+			statement.setInt(2, vehicle.getNbplaces());
 
 			statement.execute();
 
