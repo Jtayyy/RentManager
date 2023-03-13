@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
+import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.persistence.ConnectionManager;
 import com.epf.rentmanager.service.ClientService;
@@ -34,6 +35,7 @@ public class ReservationDao {
 	private static final String FIND_RESERVATIONS_BY_VEHICLE_QUERY = "SELECT id, client_id, debut, fin FROM Reservation WHERE vehicle_id=?;";
 	private static final String FIND_RESERVATIONS_QUERY = "SELECT id, client_id, vehicle_id, debut, fin FROM Reservation;";
 	private static final String COUNT_RESERVATIONS_QUERY = "SELECT COUNT(*) AS total FROM Reservation;";
+	private static final String COUNT_RESERVATIONS_QUERY_BY_CLIENT = "SELECT COUNT(*) AS total FROM Reservation WHERE client_id=?;";
 
 	public void delete(long id) throws DaoException {
 
@@ -160,6 +162,24 @@ public class ReservationDao {
 		try(Connection connection = ConnectionManager.getConnection();){
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery(COUNT_RESERVATIONS_QUERY);
+
+			rs.next();
+			int count = rs.getInt("total");
+			return count;
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+			throw new DaoException();
+		}
+	}
+
+	public int getCount(Client client) throws DaoException {
+
+		try(Connection connection = ConnectionManager.getConnection();){
+			PreparedStatement statement = connection.prepareStatement(COUNT_RESERVATIONS_QUERY_BY_CLIENT);
+			statement.setLong(1, client.getId());
+
+			ResultSet rs = statement.executeQuery();
 
 			rs.next();
 			int count = rs.getInt("total");

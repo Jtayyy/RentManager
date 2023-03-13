@@ -26,7 +26,6 @@ public class ClientService {
 	}
 
 	public void create(Client client) throws ServiceException {
-		// TODO: créer un client
 		try{
 			ClientDao.getInstance().create(client);
 		}
@@ -36,7 +35,6 @@ public class ClientService {
 	}
 
 	public void delete(long id) throws ServiceException {
-		// TODO: supprimer un client
 		try{
 			ClientDao.getInstance().delete(id);
 		}
@@ -46,7 +44,6 @@ public class ClientService {
 	}
 
 	public Client findById(long id) throws ServiceException {
-		// TODO: récupérer un client par son id
 		try{
 			return ClientDao.getInstance().findById(id);
 		}
@@ -56,7 +53,6 @@ public class ClientService {
 	}
 
 	public List<Client> findAll() throws ServiceException {
-		// TODO: récupérer tous les clients
 		try{
 			return ClientDao.getInstance().findAll();
 		}
@@ -66,7 +62,6 @@ public class ClientService {
 	}
 
 	public int getCount() throws ServiceException {
-		// TODO: compter tous les clients
 		try{
 			return ClientDao.getInstance().getCount();
 		}

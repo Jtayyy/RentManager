@@ -25,27 +25,34 @@
                     <!-- Horizontal Form -->
                     <div class="box">
                         <!-- form start -->
-                        <form class="form-horizontal" method="post" action="/users/create">
+                        <form class="form-horizontal" method="post">
                             <div class="box-body">
                                 <div class="form-group">
-                                    <label for="last_name" class="col-sm-2 control-label">Nom</label>
+                                    <label for="lastname" class="col-sm-2 control-label">Nom</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Nom">
+                                        <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Nom">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="first_name" class="col-sm-2 control-label">Prenom</label>
+                                    <label for="firstname" class="col-sm-2 control-label">Prenom</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Prenom">
+                                        <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Prenom">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="email" class="col-sm-2 control-label">Email</label>
 
                                     <div class="col-sm-10">
-                                        <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+                                        <input type="text" class="form-control" id="email" name="email" placeholder="Email">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bdate" class="col-sm-2 control-label">Date de naissance</label>
+
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="bdate" name="bdate" placeholder="Date de naissance">
                                     </div>
                                 </div>
                             </div>
