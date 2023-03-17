@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 @WebServlet("/users/create")
 public class CreateUserServlet extends HttpServlet {
@@ -25,17 +26,20 @@ public class CreateUserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String prenom = request.getParameter("firstname");
-        String nom = request.getParameter("lastname");
-        String email = request.getParameter("email");
-        LocalDate bdate = LocalDate.parse(request.getParameter("bdate"), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-
         try {
+            String prenom = request.getParameter("firstname");
+            String nom = request.getParameter("lastname");
+            String email = request.getParameter("email");
+            LocalDate bdate = LocalDate.parse(request.getParameter("bdate"), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
             ClientService.getInstance().create(new Client(prenom, nom, email, bdate));
         }
         catch (ServiceException e) {
             throw new ServletException(e);
         }
+        catch (DateTimeParseException e){
+
+        }
+
 
         this.getServletContext().getRequestDispatcher("/WEB-INF/views/users/create.jsp").forward(request, response);
     }
