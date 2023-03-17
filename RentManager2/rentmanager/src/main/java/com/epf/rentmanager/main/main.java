@@ -1,4 +1,5 @@
 package com.epf.rentmanager.main;
+import com.epf.rentmanager.config.AppConfiguration;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
@@ -6,6 +7,8 @@ import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.service.ClientService;
 import com.epf.rentmanager.service.ReservationService;
 import com.epf.rentmanager.service.VehicleService;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -15,11 +18,13 @@ import java.util.Scanner;
 
 public class main {
 
+
     public static void main(String args[]) throws ServiceException {
 
-        ClientService clients = ClientService.getInstance();
-        VehicleService vehicules = VehicleService.getInstance();
-        ReservationService reservations = ReservationService.getInstance();
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
+        ClientService clientService = context.getBean(ClientService.class);
+        VehicleService vehicleService = context.getBean(VehicleService.class);
+        ReservationService reservationService = context.getBean(ReservationService.class);
 
         Boolean boucle = true;
         while(boucle){
@@ -46,21 +51,21 @@ public class main {
                         switch (sc.nextInt()) {
 
                             case 1:
-                                clients.create(new Client(sc.next(), sc.next(), sc.next(), LocalDate.parse(sc.next(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+                                clientService.create(new Client(sc.next(), sc.next(), sc.next(), LocalDate.parse(sc.next(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
                                 break;
 
                             case 2:
-                                clients.delete(sc.nextLong());
+                                clientService.delete(sc.nextLong());
                                 break;
 
                             case 3:
-                                for (Client client : clients.findAll()) {
+                                for (Client client : clientService.findAll()) {
                                     System.out.println(client);
                                 }
                                 break;
 
                             case 4:
-                                clients.findById(sc.nextLong());
+                                clientService.findById(sc.nextLong());
                                 break;
                         }
                         break;
@@ -76,21 +81,21 @@ public class main {
                         switch (sc.nextInt()) {
 
                             case 1:
-                                vehicules.create(new Vehicle(sc.next(), sc.next(), sc.nextInt()));
+                                vehicleService.create(new Vehicle(sc.next(), sc.next(), sc.nextInt()));
                                 break;
 
                             case 2:
-                                vehicules.delete(sc.nextLong());
+                                vehicleService.delete(sc.nextLong());
                                 break;
 
                             case 3:
-                                for (Vehicle vehicle : vehicules.findAll()) {
+                                for (Vehicle vehicle : vehicleService.findAll()) {
                                     System.out.println(vehicle);
                                 }
                                 break;
 
                             case 4:
-                                vehicules.findById(sc.nextLong());
+                                vehicleService.findById(sc.nextLong());
                                 break;
                         }
                         break;
@@ -107,25 +112,25 @@ public class main {
                         switch (sc.nextInt()) {
 
                             case 1:
-                                reservations.create(new Reservation(ClientService.getInstance().findById(sc.nextLong()), VehicleService.getInstance().findById(sc.nextLong()), LocalDate.parse(sc.next(), DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalDate.parse(sc.next(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+                                reservationService.create(new Reservation(clientService.findById(sc.nextLong()), vehicleService.findById(sc.nextLong()), LocalDate.parse(sc.next(), DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalDate.parse(sc.next(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
                                 break;
 
                             case 2:
-                                reservations.delete(sc.nextLong());
+                                reservationService.delete(sc.nextLong());
                                 break;
 
                             case 3:
-                                for (Reservation reservation : reservations.findAll()) {
+                                for (Reservation reservation : reservationService.findAll()) {
                                     System.out.println(reservation);
                                 }
                                 break;
 
                             case 4:
-                                reservations.findResaByClientId(sc.nextLong());
+                                reservationService.findResaByClientId(clientService.findById(sc.nextLong()));
                                 break;
 
                             case 5:
-                                reservations.findResaByVehicleId(sc.nextLong());
+                                reservationService.findResaByVehicleId(vehicleService.findById(sc.nextLong()));
                                 break;
                         }
                         break;

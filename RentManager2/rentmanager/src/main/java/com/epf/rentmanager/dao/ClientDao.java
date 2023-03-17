@@ -13,19 +13,13 @@ import java.util.List;
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.persistence.ConnectionManager;
+import org.springframework.stereotype.Repository;
+
+@Repository
 
 public class ClientDao {
-	
-	private static ClientDao instance = null;
-	private ClientDao() {}
-	public static ClientDao getInstance() {
-		if(instance == null) {
-			instance = new ClientDao();
-		}
-		return instance;
-	}
-	
 	private static final String CREATE_CLIENT_QUERY = "INSERT INTO Client(nom, prenom, email, naissance) VALUES(?, ?, ?, ?);";
+	private static final String MODIFY_CLIENT_QUERY = "UPDATE Client SET nom=?, prenom=?, email=?, naissance=? WHERE id=?;";
 	private static final String DELETE_CLIENT_QUERY = "DELETE FROM Client WHERE id=?;";
 	private static final String FIND_CLIENT_QUERY = "SELECT nom, prenom, email, naissance FROM Client WHERE id=?;";
 	private static final String FIND_CLIENTS_QUERY = "SELECT id, nom, prenom, email, naissance FROM Client;";
@@ -58,6 +52,26 @@ public class ClientDao {
 			statement.setString(2, client.getFirstname());
 			statement.setString(3, client.getEmail());
 			statement.setDate(4, Date.valueOf(client.getBdate()));
+
+			statement.execute();
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+			throw new DaoException();
+		}
+	}
+
+	public void modify(Client client) throws DaoException {
+
+		try(Connection connection = ConnectionManager.getConnection();){
+
+			PreparedStatement statement = connection.prepareStatement(MODIFY_CLIENT_QUERY);
+
+			statement.setString(1, client.getFirstname());
+			statement.setString(2, client.getLastname());
+			statement.setString(3, client.getEmail());
+			statement.setDate(4, Date.valueOf(client.getBdate()));
+			statement.setLong(5, client.getId());
 
 			statement.execute();
 		}

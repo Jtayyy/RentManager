@@ -6,31 +6,25 @@ import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.model.Vehicle;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
+
 public class ReservationService {
 
     private ReservationDao reservationDao;
-    public static ReservationService instance;
 
-    private ReservationService() {
-        this.reservationDao = ReservationDao.getInstance();
-    }
-
-    public static ReservationService getInstance() {
-        if (instance == null) {
-            instance = new ReservationService();
-        }
-
-        return instance;
+    private ReservationService(ReservationDao reservationDao){
+        this.reservationDao = reservationDao;
     }
 
     public void create(Reservation reservation) throws ServiceException {
         try{
-            ReservationDao.getInstance().create(reservation);
+            reservationDao.create(reservation);
         }
         catch (DaoException e){
             throw new ServiceException();
@@ -39,25 +33,25 @@ public class ReservationService {
 
     public void delete(long id) throws ServiceException {
         try{
-            ReservationDao.getInstance().delete(id);
+            reservationDao.delete(id);
         }
         catch (DaoException e){
             throw new ServiceException();
         }
     }
 
-    public List<Reservation> findResaByClientId(long id) throws ServiceException {
+    public List<Reservation> findResaByClientId(Client client) throws ServiceException {
         try{
-            return ReservationDao.getInstance().findResaByClientId(id);
+            return reservationDao.findResaByClientId(client);
         }
         catch (DaoException e){
             throw new ServiceException();
         }
     }
 
-    public List<Reservation> findResaByVehicleId(long id) throws ServiceException {
+    public List<Reservation> findResaByVehicleId(Vehicle vehicle) throws ServiceException {
         try{
-            return ReservationDao.getInstance().findResaByVehicleId(id);
+            return reservationDao.findResaByVehicleId(vehicle);
         }
         catch (DaoException e){
             throw new ServiceException();
@@ -66,7 +60,7 @@ public class ReservationService {
 
     public List<Reservation> findAll() throws ServiceException {
         try{
-            return ReservationDao.getInstance().findAll();
+            return reservationDao.findAll();
         }
         catch (DaoException e){
             throw new ServiceException();
@@ -75,7 +69,7 @@ public class ReservationService {
 
     public int getCount() throws ServiceException {
         try{
-            return ReservationDao.getInstance().getCount();
+            return reservationDao.getCount();
         }
         catch (DaoException e){
             throw new ServiceException();
@@ -84,17 +78,17 @@ public class ReservationService {
 
     public int getCount(Client client) throws ServiceException {
         try{
-            return ReservationDao.getInstance().getCount(client);
+            return reservationDao.getCount(client);
         }
         catch (DaoException e){
             throw new ServiceException();
         }
     }
 
-    public List<Vehicle> findActualVehiclesByClientId(long id) throws ServiceException {
+    public List<Vehicle> findActualVehiclesByClientId(Client client) throws ServiceException {
         List<Vehicle> vehicles = new ArrayList<Vehicle>();
         try{
-            for (Reservation reservation:ReservationDao.getInstance().findResaByClientId(id)) {
+            for (Reservation reservation:reservationDao.findResaByClientId(client)) {
                 Vehicle vehicle = reservation.getVehicle();
                 if(!vehicles.contains(vehicle) && LocalDate.now().isAfter(reservation.getDebut()) && LocalDate.now().isBefore(reservation.getFin())){
                     vehicles.add(vehicle);
@@ -107,9 +101,9 @@ public class ReservationService {
         }
     }
 
-    public int getActualVehiclesCount(long id) throws ServiceException {
+    public int getActualVehiclesCount(Client client) throws ServiceException {
         try{
-            return findActualVehiclesByClientId(id).size();
+            return findActualVehiclesByClientId(client).size();
         }
         catch (ServiceException e){
             throw new ServiceException();

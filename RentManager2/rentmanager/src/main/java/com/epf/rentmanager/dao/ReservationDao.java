@@ -14,20 +14,15 @@ import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
+import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.persistence.ConnectionManager;
 import com.epf.rentmanager.service.ClientService;
 import com.epf.rentmanager.service.VehicleService;
+import org.springframework.stereotype.Repository;
+
+@Repository
 
 public class ReservationDao {
-
-	private static ReservationDao instance = null;
-	private ReservationDao() {}
-	public static ReservationDao getInstance() {
-		if(instance == null) {
-			instance = new ReservationDao();
-		}
-		return instance;
-	}
 	
 	private static final String CREATE_RESERVATION_QUERY = "INSERT INTO Reservation(client_id, vehicle_id, debut, fin) VALUES(?, ?, ?, ?);";
 	private static final String DELETE_RESERVATION_QUERY = "DELETE FROM Reservation WHERE id=?;";
@@ -36,6 +31,13 @@ public class ReservationDao {
 	private static final String FIND_RESERVATIONS_QUERY = "SELECT id, client_id, vehicle_id, debut, fin FROM Reservation;";
 	private static final String COUNT_RESERVATIONS_QUERY = "SELECT COUNT(*) AS total FROM Reservation;";
 	private static final String COUNT_RESERVATIONS_QUERY_BY_CLIENT = "SELECT COUNT(*) AS total FROM Reservation WHERE client_id=?;";
+	ClientDao clientDao;
+	VehicleDao vehicleDao;
+
+	private ReservationDao(ClientDao clientDao, VehicleDao vehicleDao){
+		this.clientDao = clientDao;
+		this.vehicleDao = vehicleDao;
+	}
 
 	public void delete(long id) throws DaoException {
 
@@ -68,13 +70,13 @@ public class ReservationDao {
 		}
 	}
 
-	public List<Reservation> findResaByClientId(long clientId) throws DaoException {
+	public List<Reservation> findResaByClientId(Client client) throws DaoException {
 
 		List<Reservation> reservations = new ArrayList<Reservation>();
 
 		try(Connection connection = ConnectionManager.getConnection();){
 			PreparedStatement statement = connection.prepareStatement(FIND_RESERVATIONS_BY_CLIENT_QUERY);
-			statement.setLong(1, clientId);
+			statement.setLong(1, client.getId());
 
 			ResultSet rs = statement.executeQuery();
 
@@ -84,7 +86,7 @@ public class ReservationDao {
 				LocalDate debut = rs.getDate("debut").toLocalDate();
 				LocalDate fin = rs.getDate("fin").toLocalDate();
 
-				Reservation reservation = new Reservation(id, ClientDao.getInstance().findById(clientId), VehicleDao.getInstance().findById(vehicleId), debut, fin);
+				Reservation reservation = new Reservation(id, clientDao.findById(client.getId()), vehicleDao.findById(vehicleId), debut, fin);
 				reservations.add(reservation);
 			}
 			return reservations;
@@ -98,13 +100,13 @@ public class ReservationDao {
 		}
 	}
 	
-	public List<Reservation> findResaByVehicleId(long vehicleId) throws DaoException {
+	public List<Reservation> findResaByVehicleId(Vehicle vehicle) throws DaoException {
 
 		List<Reservation> reservations = new ArrayList<Reservation>();
 
 		try(Connection connection = ConnectionManager.getConnection();){
 			PreparedStatement statement = connection.prepareStatement(FIND_RESERVATIONS_BY_VEHICLE_QUERY);
-			statement.setLong(1, vehicleId);
+			statement.setLong(1, vehicle.getId());
 
 			ResultSet rs = statement.executeQuery();
 
@@ -114,7 +116,7 @@ public class ReservationDao {
 				LocalDate debut = rs.getDate("debut").toLocalDate();
 				LocalDate fin = rs.getDate("fin").toLocalDate();
 
-				Reservation reservation = new Reservation(id, ClientDao.getInstance().findById(clientId), VehicleDao.getInstance().findById(vehicleId), debut, fin);
+				Reservation reservation = new Reservation(id, clientDao.findById(clientId), vehicleDao.findById(vehicle.getId()), debut, fin);
 				reservations.add(reservation);
 			}
 			return reservations;
@@ -143,7 +145,7 @@ public class ReservationDao {
 				LocalDate debut = rs.getDate("debut").toLocalDate();
 				LocalDate fin = rs.getDate("fin").toLocalDate();
 
-				Reservation reservation = new Reservation(id, ClientDao.getInstance().findById(clientId), VehicleDao.getInstance().findById(vehicleId), debut, fin);
+				Reservation reservation = new Reservation(id, clientDao.findById(clientId), vehicleDao.findById(vehicleId), debut, fin);
 				reservations.add(reservation);
 			}
 			return reservations;

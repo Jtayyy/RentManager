@@ -7,27 +7,30 @@ import com.epf.rentmanager.dao.ClientDao;
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
+import org.springframework.stereotype.Service;
+
+@Service
 
 public class ClientService {
 
 	private ClientDao clientDao;
-	public static ClientService instance;
-	
-	private ClientService() {
-		this.clientDao = ClientDao.getInstance();
-	}
-	
-	public static ClientService getInstance() {
-		if (instance == null) {
-			instance = new ClientService();
-		}
-		
-		return instance;
+
+	private ClientService(ClientDao clientDao){
+		this.clientDao = clientDao;
 	}
 
 	public void create(Client client) throws ServiceException {
 		try{
-			ClientDao.getInstance().create(client);
+			clientDao.create(client);
+		}
+		catch (DaoException e){
+			throw new ServiceException();
+		}
+	}
+
+	public void modify(Client client) throws ServiceException {
+		try{
+			clientDao.modify(client);
 		}
 		catch (DaoException e){
 			throw new ServiceException();
@@ -36,7 +39,7 @@ public class ClientService {
 
 	public void delete(long id) throws ServiceException {
 		try{
-			ClientDao.getInstance().delete(id);
+			clientDao.delete(id);
 		}
 		catch (DaoException e){
 			throw new ServiceException();
@@ -45,7 +48,7 @@ public class ClientService {
 
 	public Client findById(long id) throws ServiceException {
 		try{
-			return ClientDao.getInstance().findById(id);
+			return clientDao.findById(id);
 		}
 		catch (DaoException e){
 			throw new ServiceException();
@@ -54,7 +57,7 @@ public class ClientService {
 
 	public List<Client> findAll() throws ServiceException {
 		try{
-			return ClientDao.getInstance().findAll();
+			return clientDao.findAll();
 		}
 		catch (DaoException e){
 			throw new ServiceException();
@@ -63,7 +66,7 @@ public class ClientService {
 
 	public int getCount() throws ServiceException {
 		try{
-			return ClientDao.getInstance().getCount();
+			return clientDao.getCount();
 		}
 		catch (DaoException e){
 			throw new ServiceException();
