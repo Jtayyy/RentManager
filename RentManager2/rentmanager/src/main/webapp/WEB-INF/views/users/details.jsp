@@ -57,8 +57,8 @@
                                                 <td>${reservation.id}.</td>
                                                 <td>${reservation.vehicle.constructor}
                                                 ${reservation.vehicle.modele}</td>
-                                                <td>${reservation.debut}</td>
-                                                <td>${reservation.fin}</td>
+                                                <td>${reservation.beginning}</td>
+                                                <td>${reservation.ending}</td>
                                             </tr>
                                         </c:forEach>
                                     </table>
@@ -80,7 +80,7 @@
                                                 <td>${vehicle.id}.</td>
                                                 <td>${vehicle.modele}</td>
                                                 <td>${vehicle.constructor}</td>
-                                                <td>${vehicle.nbplaces}</td>
+                                                <td>${vehicle.seats}</td>
                                             </tr>
                                         </c:forEach>
                                     </table>

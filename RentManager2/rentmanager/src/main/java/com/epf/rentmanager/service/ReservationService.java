@@ -17,23 +17,50 @@ import java.util.List;
 public class ReservationService {
 
     private ReservationDao reservationDao;
-
-    private ReservationService(ReservationDao reservationDao){
+    private VehicleService vehicleService;
+    private ReservationService(ReservationDao reservationDao, VehicleService vehicleService){
         this.reservationDao = reservationDao;
+        this.vehicleService = vehicleService;
     }
 
     public void create(Reservation reservation) throws ServiceException {
         try{
             reservationDao.create(reservation);
+            if(LocalDate.now().isAfter(reservation.getBeginning()) && LocalDate.now().isBefore(reservation.getEnding())){
+                reservation.getVehicle().setReserved(true);
+                vehicleService.modify(reservation.getVehicle());
+            }
         }
         catch (DaoException e){
             throw new ServiceException();
         }
     }
 
-    public void delete(long id) throws ServiceException {
+    public void modify(Reservation reservation) throws ServiceException {
         try{
-            reservationDao.delete(id);
+            reservationDao.modify(reservation);
+        }
+        catch (DaoException e){
+            throw new ServiceException();
+        }
+    }
+
+    public Reservation findById(long id) throws ServiceException {
+        try{
+            return reservationDao.findById(id);
+        }
+        catch (DaoException e){
+            throw new ServiceException();
+        }
+    }
+
+    public void delete(Reservation reservation) throws ServiceException {
+        try{
+            reservationDao.delete(reservation);
+            if(LocalDate.now().isAfter(reservation.getBeginning()) && LocalDate.now().isBefore(reservation.getEnding())){
+                reservation.getVehicle().setReserved(false);
+                vehicleService.modify(reservation.getVehicle());
+            }
         }
         catch (DaoException e){
             throw new ServiceException();
@@ -85,12 +112,21 @@ public class ReservationService {
         }
     }
 
+    public int getCount(Vehicle vehicle) throws ServiceException {
+        try{
+            return reservationDao.getCount(vehicle);
+        }
+        catch (DaoException e){
+            throw new ServiceException();
+        }
+    }
+
     public List<Vehicle> findActualVehiclesByClientId(Client client) throws ServiceException {
         List<Vehicle> vehicles = new ArrayList<Vehicle>();
         try{
             for (Reservation reservation:reservationDao.findResaByClientId(client)) {
                 Vehicle vehicle = reservation.getVehicle();
-                if(!vehicles.contains(vehicle) && LocalDate.now().isAfter(reservation.getDebut()) && LocalDate.now().isBefore(reservation.getFin())){
+                if(!vehicles.contains(vehicle) && LocalDate.now().isAfter(reservation.getBeginning()) && LocalDate.now().isBefore(reservation.getEnding())){
                     vehicles.add(vehicle);
                 }
             }

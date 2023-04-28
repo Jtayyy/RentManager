@@ -5,26 +5,44 @@ public class Vehicle {
     private long id;
     private String constructor;
     private String modele;
-    private int nbplaces;
+    private int seats;
+    private boolean reserved;
 
-    public Vehicle(long id, String constructor, String modele, int nbplaces) {
+    public Vehicle(long id, String constructor, String modele, int seats) {
         this.id = id;
         this.constructor = constructor;
         this.modele = modele;
-        this.nbplaces = nbplaces;
+        this.seats = seats;
+        this.reserved = false;
     }
 
-    public Vehicle(String constructor, String modele, int nbplaces) {
+    public Vehicle(long id, String constructor, String modele, int seats, boolean reserved) {
+        this.id = id;
         this.constructor = constructor;
         this.modele = modele;
-        this.nbplaces = nbplaces;
+        this.seats = seats;
+        this.reserved = reserved;
+    }
+
+    public Vehicle(String constructor, String modele, int seats) {
+        this.constructor = constructor;
+        this.modele = modele;
+        this.seats = seats;
+        this.reserved = false;
+    }
+
+    public Vehicle(String constructor, String modele, int seats, boolean reserved) {
+        this.constructor = constructor;
+        this.modele = modele;
+        this.seats = seats;
+        this.reserved = reserved;
     }
 
     public Vehicle() {
         this.id = 000;
         this.constructor = "None";
         this.modele = "None";
-        this.nbplaces = 0;
+        this.seats = 0;
     }
 
     @Override
@@ -33,7 +51,8 @@ public class Vehicle {
                 "id=" + id +
                 ", constructor='" + constructor + '\'' +
                 ", modele='" + modele + '\'' +
-                ", nbplaces=" + nbplaces +
+                ", seats=" + seats +
+                ", reserved=" + reserved +
                 '}';
     }
 
@@ -45,7 +64,13 @@ public class Vehicle {
 
     public String getModele() { return modele; }
 
-    public int getNbplaces() {
-        return nbplaces;
+    public int getSeats() {
+        return seats;
+    }
+
+    public boolean isReserved() { return reserved; }
+
+    public void setReserved(boolean reserved) {
+        this.reserved = reserved;
     }
 }

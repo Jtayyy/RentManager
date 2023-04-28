@@ -18,11 +18,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 
 public class ClientDao {
-	private static final String CREATE_CLIENT_QUERY = "INSERT INTO Client(nom, prenom, email, naissance) VALUES(?, ?, ?, ?);";
-	private static final String MODIFY_CLIENT_QUERY = "UPDATE Client SET nom=?, prenom=?, email=?, naissance=? WHERE id=?;";
+	private static final String CREATE_CLIENT_QUERY = "INSERT INTO Client(lastname, firstname, email, bdate) VALUES(?, ?, ?, ?);";
+	private static final String MODIFY_CLIENT_QUERY = "UPDATE Client SET lastname=?, firstname=?, email=?, bdate=? WHERE id=?;";
 	private static final String DELETE_CLIENT_QUERY = "DELETE FROM Client WHERE id=?;";
-	private static final String FIND_CLIENT_QUERY = "SELECT nom, prenom, email, naissance FROM Client WHERE id=?;";
-	private static final String FIND_CLIENTS_QUERY = "SELECT id, nom, prenom, email, naissance FROM Client;";
+	private static final String FIND_CLIENT_QUERY = "SELECT lastname, firstname, email, bdate FROM Client WHERE id=?;";
+	private static final String FIND_CLIENTS_QUERY = "SELECT id, lastname, firstname, email, bdate FROM Client;";
 	private static final String COUNT_CLIENTS_QUERY = "SELECT COUNT(*) AS total FROM Client;";
 	
 	public void delete(long id) throws DaoException {
@@ -90,13 +90,13 @@ public class ClientDao {
 			ResultSet rs = statement.executeQuery();
 
 			rs.next();
-			String nom = rs.getString("nom");
-			String prenom = rs.getString("prenom");
+			String lastname = rs.getString("lastname");
+			String firstname = rs.getString("firstname");
 			String email = rs.getString("email");
-			LocalDate date = rs.getDate("naissance").toLocalDate();
+			LocalDate bdate = rs.getDate("bdate").toLocalDate();
 
 			rs.close();
-			return new Client(id, prenom, nom, email, date);
+			return new Client(id, firstname, lastname, email, bdate);
 		}
 		catch (SQLException e){
 			e.printStackTrace();
@@ -115,12 +115,12 @@ public class ClientDao {
 
 			while(rs.next()){
 				long id = rs.getInt("id");
-				String nom = rs.getString("nom");
-				String prenom = rs.getString("prenom");
+				String lastname = rs.getString("lastname");
+				String firstname = rs.getString("firstname");
 				String email = rs.getString("email");
-				LocalDate date = rs.getDate("naissance").toLocalDate();
+				LocalDate bdate = rs.getDate("bdate").toLocalDate();
 
-				Client client = new Client(id, prenom, nom, email, date);
+				Client client = new Client(id, lastname, firstname, email, bdate);
 				clients.add(client);
 			}
 

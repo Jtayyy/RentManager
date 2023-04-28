@@ -26,9 +26,9 @@ public class FillDatabase {
         PreparedStatement createPreparedStatement = null;
 
         List<String> createTablesQueries = new ArrayList<>();
-        createTablesQueries.add("CREATE TABLE IF NOT EXISTS Client(id INT primary key auto_increment, client_id INT, nom VARCHAR(100), prenom VARCHAR(100), email VARCHAR(100), naissance DATETIME)");
-        createTablesQueries.add("CREATE TABLE IF NOT EXISTS Vehicle(id INT primary key auto_increment, constructeur VARCHAR(100), modele VARCHAR(100), nb_places TINYINT(255))");
-        createTablesQueries.add("CREATE TABLE IF NOT EXISTS Reservation(id INT primary key auto_increment, client_id INT, foreign key(client_id) REFERENCES Client(id), vehicle_id INT, foreign key(vehicle_id) REFERENCES Vehicle(id), debut DATETIME, fin DATETIME)");
+        createTablesQueries.add("CREATE TABLE IF NOT EXISTS Client(id INT primary key auto_increment, client_id INT, lastname VARCHAR(100), firstname VARCHAR(100), email VARCHAR(100), bdate DATETIME)");
+        createTablesQueries.add("CREATE TABLE IF NOT EXISTS Vehicle(id INT primary key auto_increment, constructor VARCHAR(100), modele VARCHAR(100), seats TINYINT(255), reserved BOOLEAN)");
+        createTablesQueries.add("CREATE TABLE IF NOT EXISTS Reservation(id INT primary key auto_increment, client_id INT, foreign key(client_id) REFERENCES Client(id), vehicle_id INT, foreign key(vehicle_id) REFERENCES Vehicle(id), beginning DATETIME, ending DATETIME)");
 
         try {
             connection.setAutoCommit(false);
@@ -39,18 +39,22 @@ public class FillDatabase {
 	            createPreparedStatement.close();
             }
 
-            // Remplissage de la base avec des Vehicules et des Clients
+            // Remplissage de la base avec des Vehicules et des Clients et des Reservaitons
             Statement stmt = connection.createStatement();
-            stmt.execute("INSERT INTO Vehicle(constructeur, modele, nb_places) VALUES('Renault', 'Clio',  4)");
-            stmt.execute("INSERT INTO Vehicle(constructeur, modele, nb_places) VALUES('Peugeot', '3008', 4)");
-            stmt.execute("INSERT INTO Vehicle(constructeur, modele, nb_places) VALUES('Seat', 'Ibiza', 4)");
-            stmt.execute("INSERT INTO Vehicle(constructeur, modele, nb_places) VALUES('Nissan', 'Qashqai', 4)");
+            stmt.execute("INSERT INTO Vehicle(constructor, modele, seats, reserved) VALUES('Renault', 'Clio', 4, TRUE)");
+            stmt.execute("INSERT INTO Vehicle(constructor, modele, seats, reserved) VALUES('Peugeot', '3008', 4, TRUE)");
+            stmt.execute("INSERT INTO Vehicle(constructor, modele, seats, reserved) VALUES('Seat', 'Ibiza', 4, FALSE)");
+            stmt.execute("INSERT INTO Vehicle(constructor, modele, seats, reserved) VALUES('Nissan', 'Qashqai', 4, FALSE)");
             
-            stmt.execute("INSERT INTO Client(nom, prenom, email, naissance) VALUES('Dupont', 'Jean', 'jean.dupont@email.com', '1988-01-22')");
-            stmt.execute("INSERT INTO Client(nom, prenom, email, naissance) VALUES('Morin', 'Sabrina', 'sabrina.morin@email.com', '1988-01-22')");
-            stmt.execute("INSERT INTO Client(nom, prenom, email, naissance) VALUES('Afleck', 'Steeve', 'steeve.afleck@email.com', '1988-01-22')");
-            stmt.execute("INSERT INTO Client(nom, prenom, email, naissance) VALUES('Rousseau', 'Jacques', 'jacques.rousseau@email.com', '1988-01-22')");
-                    
+            stmt.execute("INSERT INTO Client(lastname, firstname, email, bdate) VALUES('Dupont', 'Jean', 'jean.dupont@email.com', '1988-01-22')");
+            stmt.execute("INSERT INTO Client(lastname, firstname, email, bdate) VALUES('Morin', 'Sabrina', 'sabrina.morin@email.com', '1988-01-22')");
+            stmt.execute("INSERT INTO Client(lastname, firstname, email, bdate) VALUES('Afleck', 'Steeve', 'steeve.afleck@email.com', '1988-01-22')");
+            stmt.execute("INSERT INTO Client(lastname, firstname, email, bdate) VALUES('Rousseau', 'Jacques', 'jacques.rousseau@email.com', '1988-01-22')");
+
+            stmt.execute("INSERT INTO Reservation(client_id, vehicle_id, beginning, ending) VALUES(1, 1, '2022-02-02', '2025-03-03')");
+            stmt.execute("INSERT INTO Reservation(client_id, vehicle_id, beginning, ending) VALUES(1, 1, '2022-01-02', '2022-01-10')");
+            stmt.execute("INSERT INTO Reservation(client_id, vehicle_id, beginning, ending) VALUES(2, 2, '2023-01-15', '2023-06-30')");
+
             connection.commit();
             System.out.println("Success!");
         } catch (SQLException e) {

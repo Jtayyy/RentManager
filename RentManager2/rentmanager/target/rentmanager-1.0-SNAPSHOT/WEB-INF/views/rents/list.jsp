@@ -41,8 +41,8 @@
                                         ${reservation.vehicle.modele}</td>
                                         <td>${reservation.client.firstname}
                                         ${reservation.client.lastname}</td>
-                                        <td>${reservation.debut}</td>
-                                        <td>${reservation.fin}</td>
+                                        <td>${reservation.beginning}</td>
+                                        <td>${reservation.ending}</td>
                                         <td>
                                             <a class="btn btn-primary disabled" href="${pageContext.request.contextPath}/cars?id=1">
                                                 <i class="fa fa-play"></i>

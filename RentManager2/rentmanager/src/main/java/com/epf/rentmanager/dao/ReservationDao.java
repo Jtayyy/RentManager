@@ -24,13 +24,16 @@ import org.springframework.stereotype.Repository;
 
 public class ReservationDao {
 	
-	private static final String CREATE_RESERVATION_QUERY = "INSERT INTO Reservation(client_id, vehicle_id, debut, fin) VALUES(?, ?, ?, ?);";
+	private static final String CREATE_RESERVATION_QUERY = "INSERT INTO Reservation(client_id, vehicle_id, beginning, ending) VALUES(?, ?, ?, ?);";
 	private static final String DELETE_RESERVATION_QUERY = "DELETE FROM Reservation WHERE id=?;";
-	private static final String FIND_RESERVATIONS_BY_CLIENT_QUERY = "SELECT id, vehicle_id, debut, fin FROM Reservation WHERE client_id=?;";
-	private static final String FIND_RESERVATIONS_BY_VEHICLE_QUERY = "SELECT id, client_id, debut, fin FROM Reservation WHERE vehicle_id=?;";
-	private static final String FIND_RESERVATIONS_QUERY = "SELECT id, client_id, vehicle_id, debut, fin FROM Reservation;";
+	private static final String MODIFY_RESERVATION_QUERY = "UPDATE Reservation SET client_id=?, vehicle_id=?, beginning=?, ending=? WHERE id=?;";
+	private static final String FIND_RESERVATIONS_BY_CLIENT_QUERY = "SELECT id, vehicle_id, beginning, ending FROM Reservation WHERE client_id=?;";
+	private static final String FIND_RESERVATIONS_BY_VEHICLE_QUERY = "SELECT id, client_id, beginning, ending FROM Reservation WHERE vehicle_id=?;";
+	private static final String FIND_RESERVATION_QUERY = "SELECT vehicle_id, client_id, beginning, ending FROM Reservation WHERE id=?;";
+	private static final String FIND_RESERVATIONS_QUERY = "SELECT id, client_id, vehicle_id, beginning, ending FROM Reservation;";
 	private static final String COUNT_RESERVATIONS_QUERY = "SELECT COUNT(*) AS total FROM Reservation;";
-	private static final String COUNT_RESERVATIONS_QUERY_BY_CLIENT = "SELECT COUNT(*) AS total FROM Reservation WHERE client_id=?;";
+	private static final String COUNT_RESERVATIONS_BY_CLIENT_QUERY = "SELECT COUNT(*) AS total FROM Reservation WHERE client_id=?;";
+	private static final String COUNT_RESERVATIONS_BY_VEHICLE_QUERY = "SELECT COUNT(*) AS total FROM Reservation WHERE vehicle_id=?;";
 	ClientDao clientDao;
 	VehicleDao vehicleDao;
 
@@ -39,11 +42,11 @@ public class ReservationDao {
 		this.vehicleDao = vehicleDao;
 	}
 
-	public void delete(long id) throws DaoException {
+	public void delete(Reservation reservation) throws DaoException {
 
 		try(Connection connection = ConnectionManager.getConnection();){
 			PreparedStatement statement = connection.prepareStatement(DELETE_RESERVATION_QUERY);
-			statement.setLong(1, id);
+			statement.setLong(1, reservation.getId());
 
 			statement.execute();
 		}
@@ -59,10 +62,53 @@ public class ReservationDao {
 			PreparedStatement statement = connection.prepareStatement(CREATE_RESERVATION_QUERY);
 			statement.setLong(1, reservation.getClient().getId());
 			statement.setLong(2, reservation.getVehicle().getId());
-			statement.setDate(3, Date.valueOf(reservation.getDebut()));
-			statement.setDate(4, Date.valueOf(reservation.getFin()));
+			statement.setDate(3, Date.valueOf(reservation.getBeginning()));
+			statement.setDate(4, Date.valueOf(reservation.getEnding()));
 
 			statement.execute();
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+			throw new DaoException();
+		}
+	}
+
+	public void modify(Reservation reservation) throws DaoException {
+
+		try(Connection connection = ConnectionManager.getConnection();){
+
+			PreparedStatement statement = connection.prepareStatement(MODIFY_RESERVATION_QUERY);
+
+			statement.setLong(1, reservation.getClient().getId());
+			statement.setLong(2, reservation.getVehicle().getId());
+			statement.setDate(3, Date.valueOf(reservation.getBeginning()));
+			statement.setDate(4, Date.valueOf(reservation.getEnding()));
+			statement.setLong(5, reservation.getId());
+
+			statement.execute();
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+			throw new DaoException();
+		}
+	}
+
+	public Reservation findById(long id) throws DaoException {
+
+		try(Connection connection = ConnectionManager.getConnection();){
+
+			PreparedStatement statement = connection.prepareStatement(FIND_RESERVATION_QUERY);
+			statement.setLong(1, id);
+			ResultSet rs = statement.executeQuery();
+
+			rs.next();
+			long vehicleId = rs.getLong("vehicle_id");
+			long clientId = rs.getLong("client_id");
+			LocalDate beginning = rs.getDate("beginning").toLocalDate();
+			LocalDate ending = rs.getDate("ending").toLocalDate();
+
+			rs.close();
+			return new Reservation(id, clientDao.findById(clientId), vehicleDao.findById(vehicleId), beginning, ending);
 		}
 		catch (SQLException e){
 			e.printStackTrace();
@@ -83,10 +129,10 @@ public class ReservationDao {
 			while(rs.next()){
 				long id = rs.getLong("id");
 				long vehicleId = rs.getLong("vehicle_id");
-				LocalDate debut = rs.getDate("debut").toLocalDate();
-				LocalDate fin = rs.getDate("fin").toLocalDate();
+				LocalDate beginning = rs.getDate("beginning").toLocalDate();
+				LocalDate ending = rs.getDate("ending").toLocalDate();
 
-				Reservation reservation = new Reservation(id, clientDao.findById(client.getId()), vehicleDao.findById(vehicleId), debut, fin);
+				Reservation reservation = new Reservation(id, clientDao.findById(client.getId()), vehicleDao.findById(vehicleId), beginning, ending);
 				reservations.add(reservation);
 			}
 			return reservations;
@@ -113,10 +159,10 @@ public class ReservationDao {
 			while(rs.next()){
 				long id = rs.getLong("id");
 				long clientId = rs.getLong("client_id");
-				LocalDate debut = rs.getDate("debut").toLocalDate();
-				LocalDate fin = rs.getDate("fin").toLocalDate();
+				LocalDate beginning = rs.getDate("beginning").toLocalDate();
+				LocalDate ending = rs.getDate("ending").toLocalDate();
 
-				Reservation reservation = new Reservation(id, clientDao.findById(clientId), vehicleDao.findById(vehicle.getId()), debut, fin);
+				Reservation reservation = new Reservation(id, clientDao.findById(clientId), vehicleDao.findById(vehicle.getId()), beginning, ending);
 				reservations.add(reservation);
 			}
 			return reservations;
@@ -142,10 +188,10 @@ public class ReservationDao {
 				long id = rs.getLong("id");
 				long clientId = rs.getLong("client_id");
 				long vehicleId = rs.getLong("vehicle_id");
-				LocalDate debut = rs.getDate("debut").toLocalDate();
-				LocalDate fin = rs.getDate("fin").toLocalDate();
+				LocalDate beginning = rs.getDate("beginning").toLocalDate();
+				LocalDate ending = rs.getDate("ending").toLocalDate();
 
-				Reservation reservation = new Reservation(id, clientDao.findById(clientId), vehicleDao.findById(vehicleId), debut, fin);
+				Reservation reservation = new Reservation(id, clientDao.findById(clientId), vehicleDao.findById(vehicleId), beginning, ending);
 				reservations.add(reservation);
 			}
 			return reservations;
@@ -178,8 +224,26 @@ public class ReservationDao {
 	public int getCount(Client client) throws DaoException {
 
 		try(Connection connection = ConnectionManager.getConnection();){
-			PreparedStatement statement = connection.prepareStatement(COUNT_RESERVATIONS_QUERY_BY_CLIENT);
+			PreparedStatement statement = connection.prepareStatement(COUNT_RESERVATIONS_BY_CLIENT_QUERY);
 			statement.setLong(1, client.getId());
+
+			ResultSet rs = statement.executeQuery();
+
+			rs.next();
+			int count = rs.getInt("total");
+			return count;
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+			throw new DaoException();
+		}
+	}
+
+	public int getCount(Vehicle vehicle) throws DaoException {
+
+		try(Connection connection = ConnectionManager.getConnection();){
+			PreparedStatement statement = connection.prepareStatement(COUNT_RESERVATIONS_BY_VEHICLE_QUERY);
+			statement.setLong(1, vehicle.getId());
 
 			ResultSet rs = statement.executeQuery();
 

@@ -15,10 +15,11 @@ public class VehicleDao {
 	
 	private static VehicleDao instance = null;
 	
-	private static final String CREATE_VEHICLE_QUERY = "INSERT INTO Vehicle(constructeur, modele, nb_places) VALUES(?, ?, ?);";
+	private static final String CREATE_VEHICLE_QUERY = "INSERT INTO Vehicle(constructor, modele, seats) VALUES(?, ?, ?);";
+	private static final String MODIFY_VEHICLE_QUERY = "UPDATE Vehicle SET constructor=?, modele=?, seats=?, reserved=? WHERE id=?;";
 	private static final String DELETE_VEHICLE_QUERY = "DELETE FROM Vehicle WHERE id=?;";
-	private static final String FIND_VEHICLE_QUERY = "SELECT id, constructeur, modele, nb_places FROM Vehicle WHERE id=?;";
-	private static final String FIND_VEHICLES_QUERY = "SELECT id, constructeur, modele, nb_places FROM Vehicle;";
+	private static final String FIND_VEHICLE_QUERY = "SELECT id, constructor, modele, seats FROM Vehicle WHERE id=?;";
+	private static final String FIND_VEHICLES_QUERY = "SELECT id, constructor, modele, seats FROM Vehicle;";
 	private static final String COUNT_VEHICLES_QUERY = "SELECT COUNT(*) AS total FROM Vehicle;";
 
 	public void delete(long id) throws DaoException {
@@ -41,7 +42,7 @@ public class VehicleDao {
 			PreparedStatement statement = connection.prepareStatement(CREATE_VEHICLE_QUERY);
 			statement.setString(1, vehicle.getConstructor());
 			statement.setString(2, vehicle.getModele());
-			statement.setInt(3, vehicle.getNbplaces());
+			statement.setInt(3, vehicle.getSeats());
 
 			statement.execute();
 		}
@@ -60,11 +61,11 @@ public class VehicleDao {
 			ResultSet rs = statement.executeQuery();
 
 			rs.next();
-			String constructeur = rs.getString("constructeur");
+			String constructor = rs.getString("constructor");
 			String modele = rs.getString("modele");
-			int nb_places = rs.getInt("nb_places");
+			int seats = rs.getInt("seats");
 
-			return new Vehicle(id, constructeur, modele, nb_places);
+			return new Vehicle(id, constructor, modele, seats);
 		}
 		catch (SQLException e){
 			e.printStackTrace();
@@ -82,11 +83,11 @@ public class VehicleDao {
 
 			while(rs.next()){
 				long id = rs.getInt("id");
-				String constructeur = rs.getString("constructeur");
+				String constructor = rs.getString("constructor");
 				String modele = rs.getString("modele");
-				int nb_places = rs.getInt("nb_places");
+				int seats = rs.getInt("seats");
 
-				Vehicle vehicule = new Vehicle(id, constructeur, modele, nb_places);
+				Vehicle vehicule = new Vehicle(id, constructor, modele, seats);
 				vehicules.add(vehicule);
 
 			}
@@ -107,6 +108,24 @@ public class VehicleDao {
 			rs.next();
 			int count = rs.getInt("total");
 			return count;
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+			throw new DaoException();
+		}
+	}
+
+	public void modify(Vehicle vehicle) throws DaoException {
+
+		try(Connection connection = ConnectionManager.getConnection();){
+			PreparedStatement statement = connection.prepareStatement(MODIFY_VEHICLE_QUERY);
+			statement.setString(1, vehicle.getConstructor());
+			statement.setString(2, vehicle.getModele());
+			statement.setInt(3, vehicle.getSeats());
+			statement.setBoolean(4, vehicle.isReserved());
+			statement.setLong(5, vehicle.getId());
+
+			statement.execute();
 		}
 		catch (SQLException e){
 			e.printStackTrace();

@@ -65,7 +65,7 @@ public class main {
                                 break;
 
                             case 4:
-                                clientService.findById(sc.nextLong());
+                                System.out.println(clientService.findById(sc.nextLong()));
                                 break;
                         }
                         break;
@@ -95,7 +95,7 @@ public class main {
                                 break;
 
                             case 4:
-                                vehicleService.findById(sc.nextLong());
+                                System.out.println(vehicleService.findById(sc.nextLong()));
                                 break;
                         }
                         break;
@@ -116,7 +116,7 @@ public class main {
                                 break;
 
                             case 2:
-                                reservationService.delete(sc.nextLong());
+                                reservationService.delete(reservationService.findById(sc.nextLong()));
                                 break;
 
                             case 3:
@@ -126,11 +126,11 @@ public class main {
                                 break;
 
                             case 4:
-                                reservationService.findResaByClientId(clientService.findById(sc.nextLong()));
+                                System.out.println(reservationService.findResaByClientId(clientService.findById(sc.nextLong())));
                                 break;
 
                             case 5:
-                                reservationService.findResaByVehicleId(vehicleService.findById(sc.nextLong()));
+                                System.out.println(reservationService.findResaByVehicleId(vehicleService.findById(sc.nextLong())));
                                 break;
                         }
                         break;
