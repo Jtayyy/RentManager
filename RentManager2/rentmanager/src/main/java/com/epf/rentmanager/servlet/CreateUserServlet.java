@@ -40,10 +40,12 @@ public class CreateUserServlet extends HttpServlet {
             String nom = request.getParameter("lastname");
             String email = request.getParameter("email");
 
-            if(clientService.valideAge(bdate) &&
+            Client client = new Client(prenom, nom, email, bdate);
+
+            if(clientService.valideAge(client) &&
             clientService.valideName(prenom) &&
             clientService.valideName(nom) &&
-            clientService.valideEmail(email)){ clientService.create(new Client(prenom, nom, email, bdate)); }
+            clientService.valideEmail(email)){ clientService.create(client); }
 
             request.setAttribute("allClients", clientService.findAll());
         }

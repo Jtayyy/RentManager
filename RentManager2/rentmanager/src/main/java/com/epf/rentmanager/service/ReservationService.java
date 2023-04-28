@@ -9,6 +9,7 @@ import com.epf.rentmanager.model.Vehicle;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -144,5 +145,28 @@ public class ReservationService {
         catch (ServiceException e){
             throw new ServiceException();
         }
+    }
+
+    public boolean valideReserv(Reservation reservation) throws ServiceException {
+        try{
+            for (Reservation resa: reservationDao.findResaByVehicleId(reservation.getVehicle())) {
+                if(reservation.getBeginning().isBefore(resa.getEnding()) && reservation.getEnding().isAfter(resa.getBeginning())){
+                    System.out.println("Cette voiture est déjà réservée pendant cette date.");
+                    return false;
+                }
+            }
+            return true;
+        }
+        catch (DaoException e){
+            throw new ServiceException();
+        }
+    }
+
+    public boolean valideSept(Reservation reservation){
+        if(ChronoUnit.DAYS.between(reservation.getBeginning(), reservation.getEnding()) > 7){
+            System.out.println("Une voiture ne peut être réservée plus de 7 jours de suite.");
+            return false;
+        }
+        return true;
     }
 }

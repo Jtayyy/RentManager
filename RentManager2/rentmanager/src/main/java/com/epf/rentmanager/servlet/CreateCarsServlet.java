@@ -37,7 +37,12 @@ public class CreateCarsServlet extends HttpServlet {
             String constructor = request.getParameter("constructor");
             String modele = request.getParameter("modele");
             int seats = Integer.parseInt(request.getParameter("seats"));
-            vehicleService.create(new Vehicle(constructor, modele, seats));
+
+            Vehicle vehicle = new Vehicle(constructor, modele, seats);
+
+            if(vehicleService.valideSeats(vehicle)){
+                vehicleService.create(vehicle);
+            }
             request.setAttribute("allVehicles", vehicleService.findAll());
         }
         catch (ServiceException e) {

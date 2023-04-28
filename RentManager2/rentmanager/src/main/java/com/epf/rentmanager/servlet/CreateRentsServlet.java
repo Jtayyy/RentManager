@@ -54,7 +54,14 @@ public class CreateRentsServlet extends HttpServlet {
             long vehicle_id = Long.parseLong(request.getParameter("vehicle_id"));
             LocalDate beginning = LocalDate.parse(request.getParameter("beginning"));
             LocalDate ending = LocalDate.parse(request.getParameter("ending"));
-            reservationService.create(new Reservation(clientService.findById(client_id), vehicleService.findById(vehicle_id), beginning, ending));
+
+            Reservation reservation = new Reservation(clientService.findById(client_id), vehicleService.findById(vehicle_id), beginning, ending);
+
+            if(reservationService.valideReserv(reservation)
+            && reservationService.valideSept(reservation)){
+                reservationService.create(reservation);
+            }
+
             request.setAttribute("allReservations", reservationService.findAll());
         }
         catch (ServiceException e) {

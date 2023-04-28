@@ -7,6 +7,7 @@ import com.epf.rentmanager.dao.ReservationDao;
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
+import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.dao.ClientDao;
 import com.epf.rentmanager.dao.VehicleDao;
@@ -17,9 +18,11 @@ import org.springframework.stereotype.Service;
 public class VehicleService {
 
 	private VehicleDao vehicleDao;
+	private ReservationDao reservationDao;
 
-	private VehicleService(VehicleDao vehicleDao){
+	private VehicleService(VehicleDao vehicleDao, ReservationDao reservationDao){
 		this.vehicleDao = vehicleDao;
+		this.reservationDao = reservationDao;
 	}
 
 	public void create(Vehicle vehicle) throws ServiceException {
@@ -33,6 +36,9 @@ public class VehicleService {
 
 	public void delete(long id) throws ServiceException {
 		try{
+			for (Reservation reservation:reservationDao.findResaByVehicleId(vehicleDao.findById(id))) {
+				reservationDao.delete(reservation);
+			}
 			vehicleDao.delete(id);
 		}
 		catch (DaoException e){
@@ -74,5 +80,13 @@ public class VehicleService {
 		catch (DaoException e){
 			throw new ServiceException();
 		}
+	}
+
+	public boolean valideSeats(Vehicle vehicle){
+		if(vehicle.getSeats() < 2 || vehicle.getSeats() > 9){
+			System.out.println("Une voiture possède 2 à 9 places.");
+			return false;
+		}
+		return true;
 	}
 }
