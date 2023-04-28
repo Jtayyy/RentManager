@@ -1,5 +1,6 @@
 package com.epf.rentmanager.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,5 +73,38 @@ public class ClientService {
 			throw new ServiceException();
 		}
 	}
-	
+
+	public boolean valideAge(LocalDate bdate){
+		if(bdate.isAfter(LocalDate.now().minusYears(18))) {
+			// Test de l'âge du client (plus de 18 ans)
+			System.out.println("Le client a moins de 18 ans");
+			return false;
+		}
+		return true;
+	}
+
+	public boolean valideName(String nom){
+		if(nom.length() < 3){
+			// Test du nombre de caractères (3 minimum)
+			System.out.println("Le nom ou le prénom saisis est trop court");
+			return false;
+		}
+		return true;
+	}
+
+	public boolean valideEmail(String email) throws ServiceException {
+		try{
+			for (Client client:clientDao.findAll()) {
+				// Test de l'email du client (pas de doublons)
+				if(client.getEmail().equals(email)){
+					System.out.println("L'email a déjà été utilisé");
+					return false;
+				}
+			}
+			return true;
+		}
+		catch (DaoException e){
+			throw new ServiceException();
+		}
+	}
 }

@@ -35,11 +35,16 @@ public class CreateUserServlet extends HttpServlet {
             throws ServletException, IOException {
 
         try {
+            LocalDate bdate = LocalDate.parse(request.getParameter("bdate"));
             String prenom = request.getParameter("firstname");
             String nom = request.getParameter("lastname");
             String email = request.getParameter("email");
-            LocalDate bdate = LocalDate.parse(request.getParameter("bdate"));
-            clientService.create(new Client(prenom, nom, email, bdate));
+
+            if(clientService.valideAge(bdate) &&
+            clientService.valideName(prenom) &&
+            clientService.valideName(nom) &&
+            clientService.valideEmail(email)){ clientService.create(new Client(prenom, nom, email, bdate)); }
+
             request.setAttribute("allClients", clientService.findAll());
         }
         catch (ServiceException e) {
