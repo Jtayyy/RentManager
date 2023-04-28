@@ -32,7 +32,7 @@ public class VehicleDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 
@@ -48,7 +48,7 @@ public class VehicleDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 
@@ -70,7 +70,7 @@ public class VehicleDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 
@@ -97,7 +97,7 @@ public class VehicleDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 
@@ -113,7 +113,7 @@ public class VehicleDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 
@@ -131,7 +131,7 @@ public class VehicleDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 }

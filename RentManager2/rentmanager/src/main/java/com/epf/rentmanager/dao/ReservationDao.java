@@ -52,7 +52,7 @@ public class ReservationDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 
@@ -69,7 +69,7 @@ public class ReservationDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 
@@ -89,7 +89,7 @@ public class ReservationDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 
@@ -112,7 +112,7 @@ public class ReservationDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 
@@ -139,10 +139,10 @@ public class ReservationDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		} catch (DaoException e) {
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 	
@@ -169,10 +169,10 @@ public class ReservationDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		} catch (DaoException e) {
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 
@@ -198,10 +198,10 @@ public class ReservationDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		} catch (DaoException e) {
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 
@@ -217,7 +217,7 @@ public class ReservationDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 
@@ -235,7 +235,7 @@ public class ReservationDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 
@@ -253,7 +253,7 @@ public class ReservationDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 }

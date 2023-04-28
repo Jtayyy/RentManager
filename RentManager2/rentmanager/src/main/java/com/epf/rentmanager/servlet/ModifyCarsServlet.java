@@ -1,6 +1,7 @@
 package com.epf.rentmanager.servlet;
 
 import com.epf.rentmanager.exception.ServiceException;
+import com.epf.rentmanager.exception.ValideException;
 import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,10 +49,17 @@ public class ModifyCarsServlet extends HttpServlet {
             String modele = request.getParameter("modele");
             int seats = Integer.parseInt(request.getParameter("seats"));
             boolean reserved = Boolean.parseBoolean(request.getParameter("reserved"));
-            vehicleService.modify(new Vehicle(id, constructor, modele, seats, reserved));
+
+            Vehicle vehicle = new Vehicle(id, constructor, modele, seats, reserved);
+
+            if(vehicleService.valideSeats(vehicle)){
+                vehicleService.modify(vehicle);
+            }
             request.setAttribute("allVehicles", vehicleService.findAll());
         }
         catch (ServiceException e) {
+            throw new ServletException(e);
+        } catch (ValideException e) {
             throw new ServletException(e);
         }
 

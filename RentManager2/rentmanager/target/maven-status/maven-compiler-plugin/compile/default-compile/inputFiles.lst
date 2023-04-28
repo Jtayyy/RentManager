@@ -29,4 +29,5 @@ C:\Users\pauli\Desktop\2e_semestre\Java\RentManager2\RentManager2\rentmanager\sr
 C:\Users\pauli\Desktop\2e_semestre\Java\RentManager2\RentManager2\rentmanager\src\main\java\com\epf\rentmanager\servlet\ModifyRentsServlet.java
 C:\Users\pauli\Desktop\2e_semestre\Java\RentManager2\RentManager2\rentmanager\src\main\java\com\epf\rentmanager\servlet\CarsServlet.java
 C:\Users\pauli\Desktop\2e_semestre\Java\RentManager2\RentManager2\rentmanager\src\main\java\com\epf\rentmanager\config\WebConfiguration.java
+C:\Users\pauli\Desktop\2e_semestre\Java\RentManager2\RentManager2\rentmanager\src\main\java\com\epf\rentmanager\exception\ValideException.java
 C:\Users\pauli\Desktop\2e_semestre\Java\RentManager2\RentManager2\rentmanager\src\main\java\com\epf\rentmanager\exception\ServiceException.java

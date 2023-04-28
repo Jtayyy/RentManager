@@ -1,6 +1,7 @@
 package com.epf.rentmanager.servlet;
 
 import com.epf.rentmanager.exception.ServiceException;
+import com.epf.rentmanager.exception.ValideException;
 import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.rowset.serial.SerialException;
 import java.io.IOException;
 
 @WebServlet("/cars/create")
@@ -46,6 +48,8 @@ public class CreateCarsServlet extends HttpServlet {
             request.setAttribute("allVehicles", vehicleService.findAll());
         }
         catch (ServiceException e) {
+            throw new ServletException(e);
+        } catch (ValideException e) {
             throw new ServletException(e);
         }
 

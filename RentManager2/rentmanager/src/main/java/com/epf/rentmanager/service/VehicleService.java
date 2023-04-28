@@ -6,6 +6,7 @@ import java.util.List;
 import com.epf.rentmanager.dao.ReservationDao;
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
+import com.epf.rentmanager.exception.ValideException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.model.Vehicle;
@@ -30,7 +31,7 @@ public class VehicleService {
 			vehicleDao.create(vehicle);
 		}
 		catch (DaoException e){
-			throw new ServiceException();
+			throw new ServiceException(e);
 		}
 	}
 
@@ -42,7 +43,7 @@ public class VehicleService {
 			vehicleDao.delete(id);
 		}
 		catch (DaoException e){
-			throw new ServiceException();
+			throw new ServiceException(e);
 		}
 	}
 
@@ -51,7 +52,7 @@ public class VehicleService {
 			return vehicleDao.findById(id);
 		}
 		catch (DaoException e){
-			throw new ServiceException();
+			throw new ServiceException(e);
 		}
 	}
 
@@ -60,7 +61,7 @@ public class VehicleService {
 			return vehicleDao.findAll();
 		}
 		catch (DaoException e){
-			throw new ServiceException();
+			throw new ServiceException(e);
 		}
 	}
 
@@ -69,7 +70,7 @@ public class VehicleService {
 			return vehicleDao.getCount();
 		}
 		catch (DaoException e){
-			throw new ServiceException();
+			throw new ServiceException(e);
 		}
 	}
 
@@ -78,14 +79,13 @@ public class VehicleService {
 			vehicleDao.modify(vehicle);
 		}
 		catch (DaoException e){
-			throw new ServiceException();
+			throw new ServiceException(e);
 		}
 	}
 
-	public boolean valideSeats(Vehicle vehicle){
+	public boolean valideSeats(Vehicle vehicle) throws ValideException {
 		if(vehicle.getSeats() < 2 || vehicle.getSeats() > 9){
-			System.out.println("Une voiture possède 2 à 9 places.");
-			return false;
+			throw new ValideException("Une voiture possède 2 à 9 places.");
 		}
 		return true;
 	}

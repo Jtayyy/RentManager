@@ -1,6 +1,7 @@
 package com.epf.rentmanager.servlet;
 
 import com.epf.rentmanager.exception.ServiceException;
+import com.epf.rentmanager.exception.ValideException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,10 +50,18 @@ public class ModifyUserServlet extends HttpServlet {
             String nom = request.getParameter("lastname");
             String email = request.getParameter("email");
             LocalDate bdate = LocalDate.parse(request.getParameter("bdate"));
-            clientService.modify(new Client(id, prenom, nom, email, bdate));
+
+            Client client = new Client(id, prenom, nom, email, bdate);
+
+            if(clientService.valideAge(client) &&
+                clientService.valideName(prenom) &&
+                clientService.valideName(nom) &&
+                clientService.valideEmail(email)){ clientService.modify(client); }
             request.setAttribute("allClients", clientService.findAll());
         }
         catch (ServiceException e) {
+            throw new ServletException(e);
+        } catch (ValideException e) {
             throw new ServletException(e);
         }
 

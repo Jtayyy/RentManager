@@ -1,6 +1,7 @@
 package com.epf.rentmanager.servlet;
 
 import com.epf.rentmanager.exception.ServiceException;
+import com.epf.rentmanager.exception.ValideException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,8 @@ public class CreateUserServlet extends HttpServlet {
             request.setAttribute("allClients", clientService.findAll());
         }
         catch (ServiceException e) {
+            throw new ServletException(e);
+        } catch (ValideException e) {
             throw new ServletException(e);
         }
 

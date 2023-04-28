@@ -1,6 +1,7 @@
 package com.epf.rentmanager.servlet;
 
 import com.epf.rentmanager.exception.ServiceException;
+import com.epf.rentmanager.exception.ValideException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.service.ClientService;
@@ -58,10 +59,18 @@ public class ModifyRentsServlet extends HttpServlet {
             long vehicle_id = Long.parseLong(request.getParameter("vehicle_id"));
             LocalDate beginning = LocalDate.parse(request.getParameter("beginning"));
             LocalDate ending = LocalDate.parse(request.getParameter("ending"));
-            reservationService.modify(new Reservation(id, clientService.findById(client_id), vehicleService.findById(vehicle_id), beginning, ending));
+
+            Reservation reservation = new Reservation(id, clientService.findById(client_id), vehicleService.findById(vehicle_id), beginning, ending);
+
+            if(reservationService.valideReserv(reservation)
+                && reservationService.valideSept(reservation)){
+                reservationService.modify(reservation);
+            }
             request.setAttribute("allReservations", reservationService.findAll());
         }
         catch (ServiceException e) {
+            throw new ServletException(e);
+        } catch (ValideException e) {
             throw new ServletException(e);
         }
 

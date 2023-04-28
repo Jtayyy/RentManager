@@ -38,7 +38,7 @@ public class ClientDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 
@@ -57,7 +57,7 @@ public class ClientDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 
@@ -77,7 +77,7 @@ public class ClientDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 
@@ -100,7 +100,7 @@ public class ClientDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 
@@ -128,7 +128,7 @@ public class ClientDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 
@@ -146,7 +146,7 @@ public class ClientDao {
 		}
 		catch (SQLException e){
 			e.printStackTrace();
-			throw new DaoException();
+			throw new DaoException(e);
 		}
 	}
 }

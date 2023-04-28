@@ -3,6 +3,7 @@ package com.epf.rentmanager.service;
 import com.epf.rentmanager.dao.ReservationDao;
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
+import com.epf.rentmanager.exception.ValideException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.model.Vehicle;
@@ -33,7 +34,7 @@ public class ReservationService {
             }
         }
         catch (DaoException e){
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
@@ -42,7 +43,7 @@ public class ReservationService {
             reservationDao.modify(reservation);
         }
         catch (DaoException e){
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
@@ -51,7 +52,7 @@ public class ReservationService {
             return reservationDao.findById(id);
         }
         catch (DaoException e){
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
@@ -64,7 +65,7 @@ public class ReservationService {
             }
         }
         catch (DaoException e){
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
@@ -73,7 +74,7 @@ public class ReservationService {
             return reservationDao.findResaByClientId(client);
         }
         catch (DaoException e){
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
@@ -82,7 +83,7 @@ public class ReservationService {
             return reservationDao.findResaByVehicleId(vehicle);
         }
         catch (DaoException e){
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
@@ -91,7 +92,7 @@ public class ReservationService {
             return reservationDao.findAll();
         }
         catch (DaoException e){
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
@@ -100,7 +101,7 @@ public class ReservationService {
             return reservationDao.getCount();
         }
         catch (DaoException e){
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
@@ -109,7 +110,7 @@ public class ReservationService {
             return reservationDao.getCount(client);
         }
         catch (DaoException e){
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
@@ -118,7 +119,7 @@ public class ReservationService {
             return reservationDao.getCount(vehicle);
         }
         catch (DaoException e){
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
@@ -134,7 +135,7 @@ public class ReservationService {
             return vehicles;
         }
         catch (DaoException e){
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
@@ -143,29 +144,29 @@ public class ReservationService {
             return findActualVehiclesByClientId(client).size();
         }
         catch (ServiceException e){
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
     public boolean valideReserv(Reservation reservation) throws ServiceException {
         try{
             for (Reservation resa: reservationDao.findResaByVehicleId(reservation.getVehicle())) {
-                if(reservation.getBeginning().isBefore(resa.getEnding()) && reservation.getEnding().isAfter(resa.getBeginning())){
-                    System.out.println("Cette voiture est déjà réservée pendant cette date.");
-                    return false;
+                if(resa.getId() != reservation.getId() && reservation.getBeginning().isBefore(resa.getEnding()) && reservation.getEnding().isAfter(resa.getBeginning())){
+                    throw new ValideException("Cette voiture est déjà réservée pendant cette date.");
                 }
             }
             return true;
         }
         catch (DaoException e){
-            throw new ServiceException();
+            throw new ServiceException(e);
+        } catch (ValideException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public boolean valideSept(Reservation reservation){
+    public boolean valideSept(Reservation reservation) throws ValideException {
         if(ChronoUnit.DAYS.between(reservation.getBeginning(), reservation.getEnding()) > 7){
-            System.out.println("Une voiture ne peut être réservée plus de 7 jours de suite.");
-            return false;
+            throw new ValideException("Une voiture ne peut être réservée plus de 7 jours de suite.");
         }
         return true;
     }
