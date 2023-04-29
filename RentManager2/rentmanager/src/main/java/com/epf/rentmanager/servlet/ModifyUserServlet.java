@@ -57,12 +57,17 @@ public class ModifyUserServlet extends HttpServlet {
                 clientService.valideName(prenom) &&
                 clientService.valideName(nom) &&
                 clientService.valideEmail(email)){ clientService.modify(client); }
-            request.setAttribute("allClients", clientService.findAll());
         }
         catch (ServiceException e) {
             throw new ServletException(e);
         } catch (ValideException e) {
-            throw new ServletException(e);
+            e.printStackTrace();
+        } finally{
+            try {
+                request.setAttribute("allClients", clientService.findAll());
+            } catch (ServiceException e) {
+                throw new ServletException(e);
+            }
         }
 
         this.getServletContext().getRequestDispatcher("/WEB-INF/views/users/list.jsp").forward(request, response);

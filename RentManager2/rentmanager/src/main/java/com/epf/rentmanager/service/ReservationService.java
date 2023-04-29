@@ -148,7 +148,7 @@ public class ReservationService {
         }
     }
 
-    public boolean valideReserv(Reservation reservation) throws ServiceException {
+    public boolean valideReserv(Reservation reservation) throws ServiceException, ValideException {
         try{
             for (Reservation resa: reservationDao.findResaByVehicleId(reservation.getVehicle())) {
                 if(resa.getId() != reservation.getId() && reservation.getBeginning().isBefore(resa.getEnding()) && reservation.getEnding().isAfter(resa.getBeginning())){
@@ -160,7 +160,7 @@ public class ReservationService {
         catch (DaoException e){
             throw new ServiceException(e);
         } catch (ValideException e) {
-            throw new RuntimeException(e);
+            throw new ValideException(e);
         }
     }
 

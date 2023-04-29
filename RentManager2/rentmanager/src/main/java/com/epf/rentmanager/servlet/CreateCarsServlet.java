@@ -45,12 +45,17 @@ public class CreateCarsServlet extends HttpServlet {
             if(vehicleService.valideSeats(vehicle)){
                 vehicleService.create(vehicle);
             }
-            request.setAttribute("allVehicles", vehicleService.findAll());
         }
         catch (ServiceException e) {
             throw new ServletException(e);
         } catch (ValideException e) {
-            throw new ServletException(e);
+            e.printStackTrace();
+        } finally{
+            try {
+                request.setAttribute("allVehicles", vehicleService.findAll());
+            } catch (ServiceException e) {
+                throw new ServletException(e);
+            }
         }
 
         this.getServletContext().getRequestDispatcher("/WEB-INF/views/cars/list.jsp").forward(request, response);

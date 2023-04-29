@@ -62,13 +62,17 @@ public class CreateRentsServlet extends HttpServlet {
             && reservationService.valideSept(reservation)){
                 reservationService.create(reservation);
             }
-
-            request.setAttribute("allReservations", reservationService.findAll());
         }
         catch (ServiceException e) {
             throw new ServletException(e);
         } catch (ValideException e) {
-            throw new ServletException(e);
+            e.printStackTrace();
+        } finally{
+            try {
+                request.setAttribute("allReservations", reservationService.findAll());
+            } catch (ServiceException e) {
+                throw new ServletException(e);
+            }
         }
 
         this.getServletContext().getRequestDispatcher("/WEB-INF/views/rents/list.jsp").forward(request, response);
