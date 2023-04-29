@@ -1,9 +1,7 @@
-package com.epf.rentmanager.servlet;
+package com.epf.rentmanager.servlet.users;
 
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.service.ClientService;
-import com.epf.rentmanager.service.ReservationService;
-import com.epf.rentmanager.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -14,11 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/cars")
-public class CarsServlet extends HttpServlet {
+@WebServlet("/users/delete")
+public class DeleteUserServlet extends HttpServlet {
 
     @Autowired
-    VehicleService vehicleService;
+    private ClientService clientService;
     @Override
     public void init() throws ServletException {
         super.init();
@@ -29,13 +27,14 @@ public class CarsServlet extends HttpServlet {
             throws ServletException, IOException {
 
         try{
-            request.setAttribute("allVehicles", vehicleService.findAll());
+            long id = Long.parseLong(request.getParameter("id"));
+            clientService.delete(id);
+            request.setAttribute("allClients", clientService.findAll());
         }
         catch (ServiceException e){
             throw new ServletException();
         }
 
-        this.getServletContext().getRequestDispatcher("/WEB-INF/views/cars/list.jsp").forward(request, response);
+        this.getServletContext().getRequestDispatcher("/WEB-INF/views/users/list.jsp").forward(request, response);
     }
-
 }

@@ -26,6 +26,9 @@
                     <div class="box">
                         <!-- form start -->
                         <form class="form-horizontal" method="post">
+                            <c:if test="${not empty errorMessage}">
+                                <div class="alert alert-danger" role="alert">${errorMessage}</div>
+                            </c:if>
                             <div class="box-body">
                                 <div class="form-group">
                                     <label for="lastname" class="col-sm-2 control-label">Nom</label>

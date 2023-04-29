@@ -159,8 +159,6 @@ public class ReservationService {
         }
         catch (DaoException e){
             throw new ServiceException(e);
-        } catch (ValideException e) {
-            throw new ValideException(e);
         }
     }
 

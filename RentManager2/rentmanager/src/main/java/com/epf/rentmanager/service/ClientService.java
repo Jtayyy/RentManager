@@ -98,11 +98,11 @@ public class ClientService {
 		return true;
 	}
 
-	public boolean valideEmail(String email) throws ServiceException, ValideException {
+	public boolean valideEmail(Client client) throws ServiceException, ValideException {
 		try{
-			for (Client client:clientDao.findAll()) {
+			for (Client cli:clientDao.findAll()) {
 				// Test de l'email du client (pas de doublons)
-				if(client.getEmail().equals(email)){
+				if(cli.getEmail().equals(client.getEmail()) && cli.getId() != client.getId()){
 					throw new ValideException("L'email a déjà été utilisé.");
 				}
 			}

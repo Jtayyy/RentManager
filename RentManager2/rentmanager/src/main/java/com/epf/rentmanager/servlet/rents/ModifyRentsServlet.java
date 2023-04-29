@@ -1,8 +1,7 @@
-package com.epf.rentmanager.servlet;
+package com.epf.rentmanager.servlet.rents;
 
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.exception.ValideException;
-import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.service.ClientService;
 import com.epf.rentmanager.service.ReservationService;
@@ -66,20 +65,16 @@ public class ModifyRentsServlet extends HttpServlet {
                 && reservationService.valideSept(reservation)){
                 reservationService.modify(reservation);
             }
+
+            request.setAttribute("allReservations", reservationService.findAll());
+            this.getServletContext().getRequestDispatcher("/WEB-INF/views/rents/list.jsp").forward(request, response);
         }
         catch (ServiceException e) {
             throw new ServletException(e);
         } catch (ValideException e) {
             e.printStackTrace();
-        } finally{
-            try {
-                request.setAttribute("allReservations", reservationService.findAll());
-            } catch (ServiceException e) {
-                throw new ServletException(e);
-            }
+            request.setAttribute("errorMessage", e.getMessage());
+            this.getServletContext().getRequestDispatcher("/WEB-INF/views/rents/modify.jsp").forward(request, response);
         }
-
-        this.getServletContext().getRequestDispatcher("/WEB-INF/views/rents/list.jsp").forward(request, response);
     }
-
 }

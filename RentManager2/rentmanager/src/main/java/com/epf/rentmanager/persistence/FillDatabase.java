@@ -51,9 +51,9 @@ public class FillDatabase {
             stmt.execute("INSERT INTO Client(lastname, firstname, email, bdate) VALUES('Afleck', 'Steeve', 'steeve.afleck@email.com', '1988-01-22')");
             stmt.execute("INSERT INTO Client(lastname, firstname, email, bdate) VALUES('Rousseau', 'Jacques', 'jacques.rousseau@email.com', '1988-01-22')");
 
-            stmt.execute("INSERT INTO Reservation(client_id, vehicle_id, beginning, ending) VALUES(1, 1, '2022-02-02', '2025-03-03')");
-            stmt.execute("INSERT INTO Reservation(client_id, vehicle_id, beginning, ending) VALUES(1, 1, '2022-01-02', '2022-01-10')");
-            stmt.execute("INSERT INTO Reservation(client_id, vehicle_id, beginning, ending) VALUES(2, 2, '2023-01-15', '2023-06-30')");
+            stmt.execute("INSERT INTO Reservation(client_id, vehicle_id, beginning, ending) VALUES(1, 1, '2023-02-05', '2023-02-10')");
+            stmt.execute("INSERT INTO Reservation(client_id, vehicle_id, beginning, ending) VALUES(1, 1, '2023-02-11', '2023-02-15')");
+            stmt.execute("INSERT INTO Reservation(client_id, vehicle_id, beginning, ending) VALUES(2, 2, '2023-01-15', '2023-01-20')");
 
             connection.commit();
             System.out.println("Success!");

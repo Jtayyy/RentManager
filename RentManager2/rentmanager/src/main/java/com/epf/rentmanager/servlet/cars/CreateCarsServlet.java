@@ -1,4 +1,4 @@
-package com.epf.rentmanager.servlet;
+package com.epf.rentmanager.servlet.cars;
 
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.exception.ValideException;
@@ -12,7 +12,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.rowset.serial.SerialException;
 import java.io.IOException;
 
 @WebServlet("/cars/create")
@@ -45,20 +44,17 @@ public class CreateCarsServlet extends HttpServlet {
             if(vehicleService.valideSeats(vehicle)){
                 vehicleService.create(vehicle);
             }
+
+            request.setAttribute("allVehicles", vehicleService.findAll());
+            this.getServletContext().getRequestDispatcher("/WEB-INF/views/cars/list.jsp").forward(request, response);
+
         }
         catch (ServiceException e) {
             throw new ServletException(e);
         } catch (ValideException e) {
             e.printStackTrace();
-        } finally{
-            try {
-                request.setAttribute("allVehicles", vehicleService.findAll());
-            } catch (ServiceException e) {
-                throw new ServletException(e);
-            }
+            request.setAttribute("errorMessage", e.getMessage());
+            this.getServletContext().getRequestDispatcher("/WEB-INF/views/cars/create.jsp").forward(request, response);
         }
-
-        this.getServletContext().getRequestDispatcher("/WEB-INF/views/cars/list.jsp").forward(request, response);
     }
-
 }

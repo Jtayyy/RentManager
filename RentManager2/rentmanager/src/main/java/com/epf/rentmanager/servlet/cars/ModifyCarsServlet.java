@@ -1,4 +1,4 @@
-package com.epf.rentmanager.servlet;
+package com.epf.rentmanager.servlet.cars;
 
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.exception.ValideException;
@@ -55,19 +55,16 @@ public class ModifyCarsServlet extends HttpServlet {
             if(vehicleService.valideSeats(vehicle)){
                 vehicleService.modify(vehicle);
             }
+
+            request.setAttribute("allVehicles", vehicleService.findAll());
+            this.getServletContext().getRequestDispatcher("/WEB-INF/views/cars/list.jsp").forward(request, response);
         }
         catch (ServiceException e) {
             throw new ServletException(e);
         } catch (ValideException e) {
             e.printStackTrace();
-        } finally{
-            try {
-                request.setAttribute("allVehicles", vehicleService.findAll());
-            } catch (ServiceException e) {
-                throw new ServletException(e);
-            }
+            request.setAttribute("errorMessage", e.getMessage());
+            this.getServletContext().getRequestDispatcher("/WEB-INF/views/cars/modify.jsp").forward(request, response);
         }
-
-        this.getServletContext().getRequestDispatcher("/WEB-INF/views/cars/list.jsp").forward(request, response);
     }
 }
