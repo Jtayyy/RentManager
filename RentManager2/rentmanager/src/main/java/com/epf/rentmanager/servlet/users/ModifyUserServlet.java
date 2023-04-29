@@ -44,6 +44,7 @@ public class ModifyUserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        Client client = null;
         try {
             long id = Long.parseLong(request.getParameter("id"));
             String prenom = request.getParameter("firstname");
@@ -51,20 +52,22 @@ public class ModifyUserServlet extends HttpServlet {
             String email = request.getParameter("email");
             LocalDate bdate = LocalDate.parse(request.getParameter("bdate"));
 
-            Client client = new Client(id, prenom, nom, email, bdate);
+            client = new Client(id, prenom, nom, email, bdate);
 
-            if(clientService.valideAge(client) &&
-                clientService.valideName(prenom) &&
-                clientService.valideName(nom) &&
-                clientService.valideEmail(client)){ clientService.modify(client); }
+            if (clientService.valideAge(client) &&
+                    clientService.valideName(prenom) &&
+                    clientService.valideName(nom) &&
+                    clientService.valideEmail(client)) {
+                clientService.modify(client);
+            }
 
             request.setAttribute("allClients", clientService.findAll());
             this.getServletContext().getRequestDispatcher("/WEB-INF/views/users/list.jsp").forward(request, response);
-        }
-        catch (ServiceException e) {
+        } catch (ServiceException e) {
             throw new ServletException(e);
         } catch (ValideException e) {
             e.printStackTrace();
+            request.setAttribute("client", client);
             request.setAttribute("errorMessage", e.getMessage());
             this.getServletContext().getRequestDispatcher("/WEB-INF/views/users/modify.jsp").forward(request, response);
         }

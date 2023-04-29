@@ -52,6 +52,7 @@ public class ModifyRentsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        Reservation reservation = null;
         try {
             long id = Long.parseLong(request.getParameter("id"));
             long client_id = Long.parseLong(request.getParameter("client_id"));
@@ -59,22 +60,26 @@ public class ModifyRentsServlet extends HttpServlet {
             LocalDate beginning = LocalDate.parse(request.getParameter("beginning"));
             LocalDate ending = LocalDate.parse(request.getParameter("ending"));
 
-            Reservation reservation = new Reservation(id, clientService.findById(client_id), vehicleService.findById(vehicle_id), beginning, ending);
+            reservation = new Reservation(id, clientService.findById(client_id), vehicleService.findById(vehicle_id), beginning, ending);
 
-            if(reservationService.valideReserv(reservation)
-                && reservationService.valideSept(reservation)){
-                reservationService.modify(reservation);
-            }
+            if (reservationService.valideReserv(reservation)
+                && reservationService.valideSept(reservation)) { reservationService.modify(reservation); }
 
             request.setAttribute("allReservations", reservationService.findAll());
             this.getServletContext().getRequestDispatcher("/WEB-INF/views/rents/list.jsp").forward(request, response);
-        }
-        catch (ServiceException e) {
-            throw new ServletException(e);
         } catch (ValideException e) {
             e.printStackTrace();
+            request.setAttribute("reservation", reservation);
+
+            try {
+                request.setAttribute("allClients", clientService.findAll());
+                request.setAttribute("allVehicles", vehicleService.findAll());
+            } catch (ServiceException ex) { throw new ServletException(ex); }
+
             request.setAttribute("errorMessage", e.getMessage());
             this.getServletContext().getRequestDispatcher("/WEB-INF/views/rents/modify.jsp").forward(request, response);
+        } catch (ServiceException e) {
+            throw new ServletException(e);
         }
     }
 }

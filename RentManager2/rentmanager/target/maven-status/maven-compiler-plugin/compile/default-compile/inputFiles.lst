@@ -13,12 +13,12 @@ C:\Users\pauli\Desktop\2e_semestre\Java\RentManager2\RentManager2\rentmanager\sr
 C:\Users\pauli\Desktop\2e_semestre\Java\RentManager2\RentManager2\rentmanager\src\main\java\com\epf\rentmanager\service\VehicleService.java
 C:\Users\pauli\Desktop\2e_semestre\Java\RentManager2\RentManager2\rentmanager\src\main\java\com\epf\rentmanager\servlet\home\HomeServlet.java
 C:\Users\pauli\Desktop\2e_semestre\Java\RentManager2\RentManager2\rentmanager\src\main\java\com\epf\rentmanager\persistence\ConnectionManager.java
+C:\Users\pauli\Desktop\2e_semestre\Java\RentManager2\RentManager2\rentmanager\src\main\java\com\epf\rentmanager\servlet\DeleteRentsServlet.java
 C:\Users\pauli\Desktop\2e_semestre\Java\RentManager2\RentManager2\rentmanager\src\main\java\com\epf\rentmanager\persistence\FillDatabase.java
 C:\Users\pauli\Desktop\2e_semestre\Java\RentManager2\RentManager2\rentmanager\src\main\java\com\epf\rentmanager\model\Client.java
 C:\Users\pauli\Desktop\2e_semestre\Java\RentManager2\RentManager2\rentmanager\src\main\java\com\epf\rentmanager\servlet\rents\ModifyRentsServlet.java
 C:\Users\pauli\Desktop\2e_semestre\Java\RentManager2\RentManager2\rentmanager\src\main\java\com\epf\rentmanager\model\Vehicle.java
 C:\Users\pauli\Desktop\2e_semestre\Java\RentManager2\RentManager2\rentmanager\src\main\java\com\epf\rentmanager\servlet\cars\DeleteCarsServlet.java
-C:\Users\pauli\Desktop\2e_semestre\Java\RentManager2\RentManager2\rentmanager\src\main\java\com\epf\rentmanager\servlet\rents\DeleteRentsServlet.java
 C:\Users\pauli\Desktop\2e_semestre\Java\RentManager2\RentManager2\rentmanager\src\main\java\com\epf\rentmanager\servlet\users\DeleteUserServlet.java
 C:\Users\pauli\Desktop\2e_semestre\Java\RentManager2\RentManager2\rentmanager\src\main\java\com\epf\rentmanager\servlet\cars\CarsDetailsServlet.java
 C:\Users\pauli\Desktop\2e_semestre\Java\RentManager2\RentManager2\rentmanager\src\main\java\com\epf\rentmanager\servlet\users\ModifyUserServlet.java

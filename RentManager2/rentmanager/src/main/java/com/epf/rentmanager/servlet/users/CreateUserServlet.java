@@ -35,28 +35,31 @@ public class CreateUserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        Client client = null;
         try {
             LocalDate bdate = LocalDate.parse(request.getParameter("bdate"));
             String prenom = request.getParameter("firstname");
             String nom = request.getParameter("lastname");
             String email = request.getParameter("email");
 
-            Client client = new Client(prenom, nom, email, bdate);
+            client = new Client(prenom, nom, email, bdate);
 
-            if(clientService.valideAge(client) &&
-            clientService.valideName(prenom) &&
-            clientService.valideName(nom) &&
-            clientService.valideEmail(client)){ clientService.create(client); }
+            if (clientService.valideAge(client) &&
+                    clientService.valideName(prenom) &&
+                    clientService.valideName(nom) &&
+                    clientService.valideEmail(client)) {
+                clientService.create(client);
+            }
 
             request.setAttribute("allClients", clientService.findAll());
             this.getServletContext().getRequestDispatcher("/WEB-INF/views/users/list.jsp").forward(request, response);
-        }
-        catch (ServiceException e) {
+        } catch (ServiceException e) {
             throw new ServletException(e);
         } catch (ValideException e) {
             e.printStackTrace();
+            request.setAttribute("client", client);
             request.setAttribute("errorMessage", e.getMessage());
-            this.getServletContext().getRequestDispatcher("/WEB-INF/views/users/create.jsp").forward(request, response);
+            this.getServletContext().getRequestDispatcher("/WEB-INF/views/users/modify.jsp").forward(request, response);
         }
     }
 

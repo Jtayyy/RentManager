@@ -70,8 +70,14 @@ public class CreateRentsServlet extends HttpServlet {
             throw new ServletException(e);
         } catch (ValideException e) {
             e.printStackTrace();
+
+            try {
+                request.setAttribute("allClients", clientService.findAll());
+                request.setAttribute("allVehicles", vehicleService.findAll());
+            } catch (ServiceException ex) { throw new ServletException(ex); }
+
             request.setAttribute("errorMessage", e.getMessage());
-            this.getServletContext().getRequestDispatcher("/WEB-INF/views/rents/create.jsp").forward(request, response);
+            this.getServletContext().getRequestDispatcher("/WEB-INF/views/rents/modify.jsp").forward(request, response);
         }
     }
 

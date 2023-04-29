@@ -43,6 +43,7 @@ public class ModifyCarsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        Vehicle vehicle = null;
         try {
             long id = Long.parseLong(request.getParameter("id"));
             String constructor = request.getParameter("constructor");
@@ -50,19 +51,19 @@ public class ModifyCarsServlet extends HttpServlet {
             int seats = Integer.parseInt(request.getParameter("seats"));
             boolean reserved = Boolean.parseBoolean(request.getParameter("reserved"));
 
-            Vehicle vehicle = new Vehicle(id, constructor, modele, seats, reserved);
+            vehicle = new Vehicle(id, constructor, modele, seats, reserved);
 
-            if(vehicleService.valideSeats(vehicle)){
+            if (vehicleService.valideSeats(vehicle)) {
                 vehicleService.modify(vehicle);
             }
 
             request.setAttribute("allVehicles", vehicleService.findAll());
             this.getServletContext().getRequestDispatcher("/WEB-INF/views/cars/list.jsp").forward(request, response);
-        }
-        catch (ServiceException e) {
+        } catch (ServiceException e) {
             throw new ServletException(e);
         } catch (ValideException e) {
             e.printStackTrace();
+            request.setAttribute("vehicle", vehicle);
             request.setAttribute("errorMessage", e.getMessage());
             this.getServletContext().getRequestDispatcher("/WEB-INF/views/cars/modify.jsp").forward(request, response);
         }
