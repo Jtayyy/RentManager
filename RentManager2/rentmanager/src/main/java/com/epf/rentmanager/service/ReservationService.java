@@ -25,10 +25,16 @@ public class ReservationService {
         this.vehicleService = vehicleService;
     }
 
+    private boolean todayBetween(Reservation reservation){
+        if(LocalDate.now().isAfter(reservation.getBeginning()) && LocalDate.now().isBefore(reservation.getEnding())){
+            return true;
+        } return false;
+    }
+
     public void create(Reservation reservation) throws ServiceException {
         try{
             reservationDao.create(reservation);
-            if(LocalDate.now().isAfter(reservation.getBeginning()) && LocalDate.now().isBefore(reservation.getEnding())){
+            if(todayBetween(reservation)){
                 reservation.getVehicle().setReserved(true);
                 vehicleService.modify(reservation.getVehicle());
             }
@@ -41,6 +47,13 @@ public class ReservationService {
     public void modify(Reservation reservation) throws ServiceException {
         try{
             reservationDao.modify(reservation);
+            if(todayBetween(reservation) && !reservation.getVehicle().isReserved()){
+                reservation.getVehicle().setReserved(true);
+                vehicleService.modify(reservation.getVehicle());
+            } else if(!todayBetween(reservation) && reservation.getVehicle().isReserved()){
+                reservation.getVehicle().setReserved(false);
+                vehicleService.modify(reservation.getVehicle());
+            }
         }
         catch (DaoException e){
             throw new ServiceException(e);
@@ -59,7 +72,7 @@ public class ReservationService {
     public void delete(Reservation reservation) throws ServiceException {
         try{
             reservationDao.delete(reservation);
-            if(LocalDate.now().isAfter(reservation.getBeginning()) && LocalDate.now().isBefore(reservation.getEnding())){
+            if(todayBetween(reservation)){
                 reservation.getVehicle().setReserved(false);
                 vehicleService.modify(reservation.getVehicle());
             }
