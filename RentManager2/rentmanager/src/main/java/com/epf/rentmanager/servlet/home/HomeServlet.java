@@ -39,6 +39,7 @@ public class HomeServlet extends HttpServlet {
 			request.setAttribute("nbClients", clientService.getCount());
 			request.setAttribute("nbVehicles", vehicleService.getCount());
 			request.setAttribute("nbReservations", reservationService.getCount());
+			reservationService.updateVehicleReserved();
 		}
 		catch (ServiceException e){
 			throw new ServletException();

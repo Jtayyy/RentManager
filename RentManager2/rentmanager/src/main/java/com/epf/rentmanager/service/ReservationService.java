@@ -161,6 +161,32 @@ public class ReservationService {
         }
     }
 
+    // Permet de mettre à jour les voitures réservées en temps réel
+    public void updateVehicleReserved() throws ServiceException {
+        try{
+            boolean var;
+            for (Vehicle vehicle:vehicleService.findAll()) {
+                var = false;
+                for (Reservation reservation:reservationDao.findResaByVehicleId(vehicle)) {
+                    if(todayBetween(reservation)){
+                        var = true;
+                        break;
+                    }
+                }
+                if(var && !vehicle.isReserved()){
+                    vehicle.setReserved(true);
+                    vehicleService.modify(vehicle);
+                } else if(!var && vehicle.isReserved()){
+                    vehicle.setReserved(false);
+                    vehicleService.modify(vehicle);
+                }
+            }
+        }
+        catch (DaoException e){
+            throw new ServiceException(e);
+        }
+    }
+
     public boolean valideReserv(Reservation reservation) throws ServiceException, ValideException {
         try{
             for (Reservation resa: reservationDao.findResaByVehicleId(reservation.getVehicle())) {

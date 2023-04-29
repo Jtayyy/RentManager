@@ -41,10 +41,10 @@ public class FillDatabase {
 
             // Remplissage de la base avec des Vehicules et des Clients et des Reservaitons
             Statement stmt = connection.createStatement();
-            stmt.execute("INSERT INTO Vehicle(constructor, modele, seats, reserved) VALUES('Renault', 'Clio', 4, TRUE)");
-            stmt.execute("INSERT INTO Vehicle(constructor, modele, seats, reserved) VALUES('Peugeot', '3008', 4, TRUE)");
+            stmt.execute("INSERT INTO Vehicle(constructor, modele, seats, reserved) VALUES('Renault', 'Clio', 4, FALSE)");
+            stmt.execute("INSERT INTO Vehicle(constructor, modele, seats, reserved) VALUES('Peugeot', '3008', 4, FALSE)");
             stmt.execute("INSERT INTO Vehicle(constructor, modele, seats, reserved) VALUES('Seat', 'Ibiza', 4, FALSE)");
-            stmt.execute("INSERT INTO Vehicle(constructor, modele, seats, reserved) VALUES('Nissan', 'Qashqai', 4, FALSE)");
+            stmt.execute("INSERT INTO Vehicle(constructor, modele, seats, reserved) VALUES('Nissan', 'Qashqai', 4, TRUE)");
             
             stmt.execute("INSERT INTO Client(lastname, firstname, email, bdate) VALUES('Dupont', 'Jean', 'jean.dupont@email.com', '1988-01-22')");
             stmt.execute("INSERT INTO Client(lastname, firstname, email, bdate) VALUES('Morin', 'Sabrina', 'sabrina.morin@email.com', '1988-01-22')");
@@ -53,7 +53,7 @@ public class FillDatabase {
 
             stmt.execute("INSERT INTO Reservation(client_id, vehicle_id, beginning, ending) VALUES(1, 1, '2023-02-05', '2023-02-10')");
             stmt.execute("INSERT INTO Reservation(client_id, vehicle_id, beginning, ending) VALUES(1, 1, '2023-02-11', '2023-02-15')");
-            stmt.execute("INSERT INTO Reservation(client_id, vehicle_id, beginning, ending) VALUES(2, 2, '2023-01-15', '2023-01-20')");
+            stmt.execute("INSERT INTO Reservation(client_id, vehicle_id, beginning, ending) VALUES(2, 2, '2023-04-28', '2023-05-04')");
 
             connection.commit();
             System.out.println("Success!");
